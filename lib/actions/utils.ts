@@ -30,7 +30,9 @@ export async function getActiveFamilyIdOrNull(): Promise<string | null> {
 }
 
 export async function withFamilyContext<T>(familyId: string, fn: () => Promise<T>): Promise<T> {
-  await db.execute(sql`SET LOCAL app.current_family = ${familyId}`)
+  // SET LOCAL does not support parameterized values ($1) in PostgreSQL — embed directly.
+  // familyId is always a UUID from Better Auth, no injection risk.
+  await db.execute(sql.raw(`SET LOCAL "app.current_family" = '${familyId}'`))
   return fn()
 }
 
