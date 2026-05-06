@@ -11,12 +11,12 @@ import { startOfMonth } from '@/lib/utils/dates'
 import { CreateFamilyForm } from '@/components/families/create-family-form'
 
 async function DashboardContent() {
-  const family = await getActiveFamily()
+  const family = await getActiveFamily().catch(() => null)
 
   if (!family) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-center">
-        <h1 className="text-xl font-semibold text-neutral-900">Welcome to Owo-mi</h1>
+        <h1 className="text-xl font-semibold text-neutral-900">Welcome to Owó-mi</h1>
         <p className="mt-2 text-sm text-neutral-500">
           Create a family to start tracking your finances.
         </p>

@@ -1,9 +1,14 @@
 'use server'
 
-import { eq, and, isNull, gte, lte, ilike, desc } from 'drizzle-orm'
+import { eq, and, isNull, gte, lte, ilike, desc, sql } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
-import { transactions, transactionTags, categorizationRules } from '@/lib/db/schema'
+import {
+  transactions,
+  transactionTags,
+  categorizationRules,
+  financialAccounts,
+} from '@/lib/db/schema'
 import {
   createTransactionSchema,
   updateTransactionSchema,
@@ -85,6 +90,15 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
         .insert(transactions)
         .values({ ...txData, categoryId, familyId })
         .returning({ id: transactions.id })
+
+      await db
+        .update(financialAccounts)
+        .set({
+          balanceCents: sql`${financialAccounts.balanceCents} + ${txData.amountCents}`,
+          updatedAt: new Date(),
+        })
+        .where(eq(financialAccounts.id, txData.accountId))
+
       return { id: row.id, categoryId }
     }
   )
@@ -103,6 +117,7 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
   })
 
   revalidatePath('/transactions')
+  revalidatePath('/accounts')
   revalidatePath('/')
   return { success: true, data: { id: txId } }
 }
@@ -119,12 +134,43 @@ export async function updateTransaction(input: unknown): Promise<ActionResult<vo
   const existing = await getTransaction(id)
   if (!existing) return { success: false, error: 'Transaction not found' }
 
-  await withFamilyContext(familyId, () =>
-    db
+  const oldAccountId = existing.accountId
+  const newAccountId = updates.accountId ?? existing.accountId
+  const oldAmountCents = existing.amountCents
+  const newAmountCents = updates.amountCents ?? existing.amountCents
+
+  await withFamilyContext(familyId, async () => {
+    await db
       .update(transactions)
       .set({ ...updates, updatedAt: new Date() })
       .where(and(eq(transactions.id, id), eq(transactions.familyId, familyId)))
-  )
+
+    if (oldAccountId !== newAccountId) {
+      await db
+        .update(financialAccounts)
+        .set({
+          balanceCents: sql`${financialAccounts.balanceCents} - ${oldAmountCents}`,
+          updatedAt: new Date(),
+        })
+        .where(eq(financialAccounts.id, oldAccountId))
+      await db
+        .update(financialAccounts)
+        .set({
+          balanceCents: sql`${financialAccounts.balanceCents} + ${newAmountCents}`,
+          updatedAt: new Date(),
+        })
+        .where(eq(financialAccounts.id, newAccountId))
+    } else if (newAmountCents !== oldAmountCents) {
+      const delta = newAmountCents - oldAmountCents
+      await db
+        .update(financialAccounts)
+        .set({
+          balanceCents: sql`${financialAccounts.balanceCents} + ${delta}`,
+          updatedAt: new Date(),
+        })
+        .where(eq(financialAccounts.id, oldAccountId))
+    }
+  })
 
   if (tagIds !== undefined) {
     await db.delete(transactionTags).where(eq(transactionTags.transactionId, id))
@@ -144,6 +190,7 @@ export async function updateTransaction(input: unknown): Promise<ActionResult<vo
   })
 
   revalidatePath('/transactions')
+  revalidatePath('/accounts')
   revalidatePath('/')
   return { success: true, data: undefined }
 }
@@ -154,12 +201,20 @@ export async function deleteTransaction(id: string): Promise<ActionResult<void>>
   const existing = await getTransaction(id)
   if (!existing) return { success: false, error: 'Transaction not found' }
 
-  await withFamilyContext(familyId, () =>
-    db
+  await withFamilyContext(familyId, async () => {
+    await db
       .update(transactions)
       .set({ deletedAt: new Date() })
       .where(and(eq(transactions.id, id), eq(transactions.familyId, familyId)))
-  )
+
+    await db
+      .update(financialAccounts)
+      .set({
+        balanceCents: sql`${financialAccounts.balanceCents} - ${existing.amountCents}`,
+        updatedAt: new Date(),
+      })
+      .where(eq(financialAccounts.id, existing.accountId))
+  })
 
   await writeAuditLog({
     familyId,
@@ -171,6 +226,7 @@ export async function deleteTransaction(id: string): Promise<ActionResult<void>>
   })
 
   revalidatePath('/transactions')
+  revalidatePath('/accounts')
   revalidatePath('/')
   return { success: true, data: undefined }
 }

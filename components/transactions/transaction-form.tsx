@@ -11,13 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { CategoryCombobox } from '@/components/categories/category-combobox'
 import { parseCurrencyInput } from '@/lib/utils/currency'
 import { toDateInputValue } from '@/lib/utils/dates'
@@ -148,7 +142,11 @@ export function TransactionForm({ accounts, categories, onSuccess }: Transaction
           render={({ field }) => (
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Select account" />
+                <span className="flex flex-1 text-left text-sm">
+                  {accounts.find((a) => a.id === field.value)?.name ?? (
+                    <span className="text-neutral-400">Select account</span>
+                  )}
+                </span>
               </SelectTrigger>
               <SelectContent>
                 {accounts.map((acc) => (
