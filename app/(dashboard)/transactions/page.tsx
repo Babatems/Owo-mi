@@ -1,0 +1,56 @@
+import { Suspense } from 'react'
+import Link from 'next/link'
+import { getTransactions } from '@/lib/actions/transactions'
+import { TransactionRow } from '@/components/transactions/transaction-row'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import { Plus } from 'lucide-react'
+
+async function TransactionsList() {
+  const txs = await getTransactions({ limit: 100 })
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-xl font-semibold text-neutral-900">Transactions</h1>
+          <p className="mt-0.5 text-sm text-neutral-500">
+            {txs.length} transaction{txs.length !== 1 ? 's' : ''}
+          </p>
+        </div>
+        <Link href="/transactions/new">
+          <Button size="sm" className="gap-1.5">
+            <Plus className="size-4" />
+            Add
+          </Button>
+        </Link>
+      </div>
+
+      <Card className="border-neutral-200">
+        <CardContent className="pt-4">
+          {txs.length === 0 ? (
+            <div className="py-10 text-center">
+              <p className="text-sm text-neutral-500">No transactions yet.</p>
+              <Link href="/transactions/new">
+                <Button variant="outline" size="sm" className="mt-3">
+                  Add your first transaction
+                </Button>
+              </Link>
+            </div>
+          ) : (
+            txs.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+
+export default function TransactionsPage() {
+  return (
+    <Suspense fallback={<Skeleton className="h-60 w-full" />}>
+      <TransactionsList />
+    </Suspense>
+  )
+}
