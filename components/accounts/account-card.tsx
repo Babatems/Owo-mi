@@ -4,7 +4,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Currency } from '@/components/ui/currency'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import {
@@ -42,15 +41,26 @@ const ACCOUNT_TYPE_COLORS: Record<string, string> = {
   cash: 'bg-neutral-100 text-neutral-600',
 }
 
+const REGISTERED_TYPES = new Set(['tfsa', 'rrsp', 'fhsa', 'resp'])
+
+const CONTRIBUTION_LIMITS: Record<string, number> = {
+  tfsa: 700000, // $7,000 annual
+  rrsp: 3381000, // $33,810 annual
+  fhsa: 800000, // $8,000 annual
+  resp: 5000000, // $50,000 lifetime
+}
+
 type Account = {
   id: string
   name: string
+  slug: string | null
   type: string
   balanceCents: number
   currency: string
   institution: string | null
   last4?: string | null
   notes?: string | null
+  contributionRoomCents?: number | null
 }
 
 export function AccountCard({ account }: { account: Account }) {
@@ -98,7 +108,9 @@ export function AccountCard({ account }: { account: Account }) {
                     <Pencil className="mr-2 size-3.5" />
                     Edit
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => router.push(`/accounts/${account.id}`)}>
+                  <DropdownMenuItem
+                    onClick={() => router.push(`/accounts/${account.slug ?? account.id}`)}
+                  >
                     <ArrowRight className="mr-2 size-3.5" />
                     View transactions
                   </DropdownMenuItem>
@@ -116,7 +128,7 @@ export function AccountCard({ account }: { account: Account }) {
             </div>
           </div>
 
-          <Link href={`/accounts/${account.id}`} className="mt-4 block">
+          <Link href={`/accounts/${account.slug ?? account.id}`} className="mt-4 block">
             <Currency
               cents={account.balanceCents}
               currency={account.currency}
@@ -125,6 +137,32 @@ export function AccountCard({ account }: { account: Account }) {
             />
             <p className="mt-0.5 text-xs text-neutral-400">Current balance</p>
           </Link>
+
+          {REGISTERED_TYPES.has(account.type) && account.contributionRoomCents != null && (
+            <div className="mt-3 rounded-md bg-violet-50 px-3 py-2">
+              <p className="text-xs font-medium text-violet-700">
+                <Currency
+                  cents={account.contributionRoomCents}
+                  currency={account.currency}
+                  className="text-xs"
+                />{' '}
+                contribution room
+              </p>
+              {CONTRIBUTION_LIMITS[account.type] && (
+                <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-violet-100">
+                  <div
+                    className="h-full rounded-full bg-violet-400"
+                    style={{
+                      width: `${Math.min(
+                        (account.contributionRoomCents / CONTRIBUTION_LIMITS[account.type]) * 100,
+                        100
+                      )}%`,
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
 

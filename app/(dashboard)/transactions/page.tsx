@@ -1,14 +1,22 @@
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { getTransactions } from '@/lib/actions/transactions'
+import { getAccounts } from '@/lib/actions/accounts'
+import { getCategories } from '@/lib/actions/categories'
 import { TransactionRow } from '@/components/transactions/transaction-row'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Plus } from 'lucide-react'
+import { Plus, Upload } from 'lucide-react'
 
 async function TransactionsList() {
-  const txs = await getTransactions({ limit: 100 })
+  const [txs, accounts, categories] = await Promise.all([
+    getTransactions({ limit: 100 }),
+    getAccounts(),
+    getCategories(),
+  ])
+
+  const accountsMini = accounts.map((a) => ({ id: a.id, name: a.name, type: a.type }))
 
   return (
     <div className="space-y-6">
@@ -19,12 +27,20 @@ async function TransactionsList() {
             {txs.length} transaction{txs.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <Link href="/transactions/new">
-          <Button size="sm" className="gap-1.5">
-            <Plus className="size-4" />
-            Add
-          </Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/transactions/import">
+            <Button size="sm" variant="outline" className="gap-1.5">
+              <Upload className="size-4" />
+              Import
+            </Button>
+          </Link>
+          <Link href="/transactions/new">
+            <Button size="sm" className="gap-1.5">
+              <Plus className="size-4" />
+              Add
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <Card className="border-neutral-200">
@@ -39,7 +55,15 @@ async function TransactionsList() {
               </Link>
             </div>
           ) : (
-            txs.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
+            txs.map((tx) => (
+              <TransactionRow
+                key={tx.id}
+                tx={tx}
+                showActions
+                accounts={accountsMini}
+                categories={categories}
+              />
+            ))
           )}
         </CardContent>
       </Card>

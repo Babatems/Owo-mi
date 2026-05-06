@@ -1,12 +1,16 @@
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
-import { getAccount } from '@/lib/actions/accounts'
+import Link from 'next/link'
+import { getAccountBySlug } from '@/lib/actions/accounts'
 import { getTransactions } from '@/lib/actions/transactions'
+import { getCategories } from '@/lib/actions/categories'
 import { Currency } from '@/components/ui/currency'
 import { TransactionRow } from '@/components/transactions/transaction-row'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
+import { ChevronLeft } from 'lucide-react'
 
 const ACCOUNT_TYPE_LABELS: Record<string, string> = {
   checking: 'Chequing',
@@ -20,17 +24,26 @@ const ACCOUNT_TYPE_LABELS: Record<string, string> = {
   cash: 'Cash',
 }
 
-async function AccountDetail({ id }: { id: string }) {
-  const [account, txs] = await Promise.all([
-    getAccount(id),
-    getTransactions({ accountId: id, limit: 50 }),
-  ])
+async function AccountDetail({ slug }: { slug: string }) {
+  const [account, categories] = await Promise.all([getAccountBySlug(slug), getCategories()])
 
   if (!account) notFound()
+
+  const txs = await getTransactions({ accountId: account.id, limit: 100 })
 
   return (
     <div className="space-y-6">
       <div>
+        <Link href="/accounts">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mb-2 -ml-2 gap-1 text-neutral-500 hover:text-neutral-700"
+          >
+            <ChevronLeft className="size-4" />
+            Accounts
+          </Button>
+        </Link>
         <div className="flex items-center gap-2">
           <h1 className="text-xl font-semibold text-neutral-900">{account.name}</h1>
           <Badge variant="secondary">{ACCOUNT_TYPE_LABELS[account.type] ?? account.type}</Badge>
@@ -68,7 +81,9 @@ async function AccountDetail({ id }: { id: string }) {
               No transactions for this account.
             </p>
           ) : (
-            txs.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
+            txs.map((tx) => (
+              <TransactionRow key={tx.id} tx={tx} showActions categories={categories} />
+            ))
           )}
         </CardContent>
       </Card>
@@ -80,7 +95,7 @@ export default async function AccountDetailPage({ params }: { params: Promise<{ 
   const { id } = await params
   return (
     <Suspense fallback={<Skeleton className="h-60 w-full" />}>
-      <AccountDetail id={id} />
+      <AccountDetail slug={id} />
     </Suspense>
   )
 }

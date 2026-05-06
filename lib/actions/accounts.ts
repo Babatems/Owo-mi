@@ -8,6 +8,15 @@ import { createAccountSchema, updateAccountSchema } from '@/lib/validations/sche
 import { getSession, getActiveFamilyId, withFamilyContext, writeAuditLog } from './utils'
 import type { ActionResult } from './utils'
 
+function makeSlug(name: string, id: string): string {
+  const base = name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40)
+  return `${base}-${id.slice(0, 6)}`
+}
+
 export async function getAccounts() {
   const familyId = await getActiveFamilyId().catch(() => null)
   if (!familyId) return []
@@ -32,6 +41,22 @@ export async function getAccount(id: string) {
   )
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+
+export async function getAccountBySlug(slug: string) {
+  const familyId = await getActiveFamilyId()
+  const isUUID = UUID_RE.test(slug)
+  return withFamilyContext(familyId, () =>
+    db.query.financialAccounts.findFirst({
+      where: and(
+        isUUID ? eq(financialAccounts.id, slug) : eq(financialAccounts.slug, slug),
+        eq(financialAccounts.familyId, familyId),
+        isNull(financialAccounts.deletedAt)
+      ),
+    })
+  )
+}
+
 export async function createAccount(input: unknown): Promise<ActionResult<{ id: string }>> {
   const session = await getSession()
   const familyId = await getActiveFamilyId()
@@ -40,10 +65,12 @@ export async function createAccount(input: unknown): Promise<ActionResult<{ id: 
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid input' }
   }
 
+  const id = crypto.randomUUID()
+  const slug = makeSlug(parsed.data.name, id)
   const [account] = await withFamilyContext(familyId, () =>
     db
       .insert(financialAccounts)
-      .values({ ...parsed.data, familyId })
+      .values({ id, ...parsed.data, familyId, slug })
       .returning({ id: financialAccounts.id })
   )
 
@@ -72,10 +99,12 @@ export async function updateAccount(input: unknown): Promise<ActionResult<void>>
   const existing = await getAccount(id)
   if (!existing) return { success: false, error: 'Account not found' }
 
+  const slugUpdate = updates.name ? { slug: makeSlug(updates.name, id) } : {}
+
   await withFamilyContext(familyId, () =>
     db
       .update(financialAccounts)
-      .set({ ...updates, updatedAt: new Date() })
+      .set({ ...updates, ...slugUpdate, updatedAt: new Date() })
       .where(and(eq(financialAccounts.id, id), eq(financialAccounts.familyId, familyId)))
   )
 

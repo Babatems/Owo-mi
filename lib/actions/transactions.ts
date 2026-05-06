@@ -93,11 +93,10 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
 
       await db
         .update(financialAccounts)
-        .set({
-          balanceCents: sql`${financialAccounts.balanceCents} + ${txData.amountCents}`,
-          updatedAt: new Date(),
-        })
-        .where(eq(financialAccounts.id, txData.accountId))
+        .set({ balanceCents: sql`balance_cents + ${txData.amountCents}`, updatedAt: new Date() })
+        .where(
+          and(eq(financialAccounts.id, txData.accountId), eq(financialAccounts.familyId, familyId))
+        )
 
       return { id: row.id, categoryId }
     }
@@ -117,7 +116,7 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
   })
 
   revalidatePath('/transactions')
-  revalidatePath('/accounts')
+  revalidatePath('/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: { id: txId } }
 }
@@ -148,27 +147,24 @@ export async function updateTransaction(input: unknown): Promise<ActionResult<vo
     if (oldAccountId !== newAccountId) {
       await db
         .update(financialAccounts)
-        .set({
-          balanceCents: sql`${financialAccounts.balanceCents} - ${oldAmountCents}`,
-          updatedAt: new Date(),
-        })
-        .where(eq(financialAccounts.id, oldAccountId))
+        .set({ balanceCents: sql`balance_cents - ${oldAmountCents}`, updatedAt: new Date() })
+        .where(
+          and(eq(financialAccounts.id, oldAccountId), eq(financialAccounts.familyId, familyId))
+        )
       await db
         .update(financialAccounts)
-        .set({
-          balanceCents: sql`${financialAccounts.balanceCents} + ${newAmountCents}`,
-          updatedAt: new Date(),
-        })
-        .where(eq(financialAccounts.id, newAccountId))
+        .set({ balanceCents: sql`balance_cents + ${newAmountCents}`, updatedAt: new Date() })
+        .where(
+          and(eq(financialAccounts.id, newAccountId), eq(financialAccounts.familyId, familyId))
+        )
     } else if (newAmountCents !== oldAmountCents) {
       const delta = newAmountCents - oldAmountCents
       await db
         .update(financialAccounts)
-        .set({
-          balanceCents: sql`${financialAccounts.balanceCents} + ${delta}`,
-          updatedAt: new Date(),
-        })
-        .where(eq(financialAccounts.id, oldAccountId))
+        .set({ balanceCents: sql`balance_cents + ${delta}`, updatedAt: new Date() })
+        .where(
+          and(eq(financialAccounts.id, oldAccountId), eq(financialAccounts.familyId, familyId))
+        )
     }
   })
 
@@ -190,7 +186,7 @@ export async function updateTransaction(input: unknown): Promise<ActionResult<vo
   })
 
   revalidatePath('/transactions')
-  revalidatePath('/accounts')
+  revalidatePath('/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: undefined }
 }
@@ -209,11 +205,10 @@ export async function deleteTransaction(id: string): Promise<ActionResult<void>>
 
     await db
       .update(financialAccounts)
-      .set({
-        balanceCents: sql`${financialAccounts.balanceCents} - ${existing.amountCents}`,
-        updatedAt: new Date(),
-      })
-      .where(eq(financialAccounts.id, existing.accountId))
+      .set({ balanceCents: sql`balance_cents - ${existing.amountCents}`, updatedAt: new Date() })
+      .where(
+        and(eq(financialAccounts.id, existing.accountId), eq(financialAccounts.familyId, familyId))
+      )
   })
 
   await writeAuditLog({
@@ -226,7 +221,7 @@ export async function deleteTransaction(id: string): Promise<ActionResult<void>>
   })
 
   revalidatePath('/transactions')
-  revalidatePath('/accounts')
+  revalidatePath('/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: undefined }
 }

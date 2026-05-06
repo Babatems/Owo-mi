@@ -6,6 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { SignOutButton } from '@/components/settings/sign-out-button'
+import { InviteForm } from '@/components/settings/invite-form'
 
 async function SettingsContent() {
   const [session, family] = await Promise.all([
@@ -24,17 +26,20 @@ async function SettingsContent() {
         <CardHeader>
           <CardTitle className="text-sm font-medium text-neutral-700">Your account</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-center gap-3">
-            <Avatar className="size-10">
-              <AvatarFallback className="bg-neutral-100 text-neutral-700">
-                {session?.user?.name?.slice(0, 2).toUpperCase() ?? '?'}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="font-medium text-neutral-900">{session?.user?.name}</p>
-              <p className="text-sm text-neutral-500">{session?.user?.email}</p>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar className="size-10">
+                <AvatarFallback className="bg-neutral-100 text-neutral-700">
+                  {session?.user?.name?.slice(0, 2).toUpperCase() ?? '?'}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-medium text-neutral-900">{session?.user?.name}</p>
+                <p className="text-sm text-neutral-500">{session?.user?.email}</p>
+              </div>
             </div>
+            <SignOutButton />
           </div>
         </CardContent>
       </Card>
@@ -46,7 +51,7 @@ async function SettingsContent() {
             Family — {family?.name ?? 'None'}
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           {members.length === 0 ? (
             <p className="text-sm text-neutral-400">No members found.</p>
           ) : (
@@ -73,12 +78,19 @@ async function SettingsContent() {
               )}
             </div>
           )}
+
+          {family && (
+            <div className="border-t border-neutral-100 pt-4">
+              <p className="mb-3 text-sm font-medium text-neutral-700">Invite a family member</p>
+              <InviteForm familyId={family.id} />
+            </div>
+          )}
         </CardContent>
       </Card>
 
       {/* Privacy notice */}
       <p className="text-xs text-neutral-400">
-        Your data is stored in Canada (Montréal) and is never shared with third parties. Owo-mi
+        Your data is stored in Canada (Montréal) and is never shared with third parties. Owó-mi
         complies with PIPEDA and Quebec Law 25.
       </p>
     </div>

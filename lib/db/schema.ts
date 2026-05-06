@@ -65,17 +65,22 @@ export const financialAccounts = pgTable(
     id: uuid('id').primaryKey().defaultRandom(),
     familyId: text('family_id').notNull(),
     name: text('name').notNull(),
+    slug: text('slug'),
     type: accountTypeEnum('type').notNull(),
     balanceCents: integer('balance_cents').notNull().default(0),
     currency: text('currency').notNull().default('CAD'),
     institution: text('institution'),
     last4: text('last4'),
     notes: text('notes'),
+    contributionRoomCents: integer('contribution_room_cents'),
     deletedAt: timestamp('deleted_at'),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   },
-  (t) => [index('financial_accounts_family_idx').on(t.familyId)]
+  (t) => [
+    index('financial_accounts_family_idx').on(t.familyId),
+    unique('financial_accounts_family_slug').on(t.familyId, t.slug),
+  ]
 )
 
 export const categories = pgTable(

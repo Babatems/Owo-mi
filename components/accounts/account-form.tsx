@@ -6,7 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import type { Resolver } from 'react-hook-form'
 import {
   createAccountSchema,
-  updateAccountSchema,
   accountTypes,
   type CreateAccountInput,
   type UpdateAccountInput,
@@ -23,6 +22,22 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { parseCurrencyInput } from '@/lib/utils/currency'
+
+const REGISTERED_TYPES = new Set(['tfsa', 'rrsp', 'fhsa', 'resp'])
+
+const REGISTERED_ROOM_LABELS: Record<string, string> = {
+  tfsa: 'Contribution room remaining (from CRA My Account)',
+  rrsp: 'RRSP deduction limit (from Notice of Assessment)',
+  fhsa: 'Annual contribution room remaining',
+  resp: 'Remaining room before $50,000 lifetime limit',
+}
+
+const REGISTERED_ROOM_HINTS: Record<string, string> = {
+  tfsa: '2026 annual limit: $7,000 · Cumulative: $109,000',
+  rrsp: '2026 annual limit: $33,810 (or 18% of 2025 earned income, whichever is less)',
+  fhsa: '2026 annual limit: $8,000 · Lifetime limit: $40,000',
+  resp: '$50,000 lifetime limit per beneficiary',
+}
 
 const ACCOUNT_TYPE_LABELS: Record<string, string> = {
   checking: 'Chequing',
@@ -45,6 +60,7 @@ type AccountData = {
   institution: string | null
   last4?: string | null
   notes?: string | null
+  contributionRoomCents?: number | null
 }
 
 interface AccountFormProps {
@@ -59,6 +75,13 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
   const [balanceRaw, setBalanceRaw] = useState(
     isEdit ? (Math.abs(account.balanceCents) / 100).toFixed(2) : ''
   )
+  const [roomRaw, setRoomRaw] = useState(
+    isEdit && account.contributionRoomCents != null
+      ? (account.contributionRoomCents / 100).toFixed(2)
+      : ''
+  )
+
+  const [selectedType, setSelectedType] = useState<string>(account?.type ?? 'checking')
 
   const form = useForm<CreateAccountInput>({
     resolver: zodResolver(createAccountSchema) as Resolver<CreateAccountInput>,
@@ -69,6 +92,7 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
       currency: account?.currency ?? 'CAD',
       institution: account?.institution ?? '',
       last4: account?.last4 ?? '',
+      contributionRoomCents: account?.contributionRoomCents ?? undefined,
     },
   })
 
@@ -105,8 +129,12 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
       <div className="space-y-1.5">
         <Label htmlFor="acc-type">Account type</Label>
         <Select
-          value={form.watch('type')}
-          onValueChange={(v) => form.setValue('type', v as CreateAccountInput['type'])}
+          value={selectedType}
+          onValueChange={(v) => {
+            if (!v) return
+            setSelectedType(v)
+            form.setValue('type', v as CreateAccountInput['type'])
+          }}
         >
           <SelectTrigger id="acc-type">
             <SelectValue />
@@ -152,6 +180,32 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
         <Label htmlFor="acc-last4">Last 4 digits (optional)</Label>
         <Input id="acc-last4" placeholder="e.g. 4321" maxLength={4} {...form.register('last4')} />
       </div>
+
+      {REGISTERED_TYPES.has(selectedType) && (
+        <div className="space-y-1.5 rounded-lg border border-violet-100 bg-violet-50 p-3">
+          <Label htmlFor="acc-room" className="text-violet-800">
+            {REGISTERED_ROOM_LABELS[selectedType] ?? 'Contribution room remaining'}
+          </Label>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-violet-500">CAD $</span>
+            <Input
+              id="acc-room"
+              inputMode="decimal"
+              placeholder="0.00"
+              value={roomRaw}
+              onChange={(e) => {
+                setRoomRaw(e.target.value)
+                const cents = parseCurrencyInput(e.target.value)
+                form.setValue('contributionRoomCents', cents > 0 ? cents : undefined)
+              }}
+              className="border-violet-200 bg-white"
+            />
+          </div>
+          {REGISTERED_ROOM_HINTS[selectedType] && (
+            <p className="text-xs text-violet-600">{REGISTERED_ROOM_HINTS[selectedType]}</p>
+          )}
+        </div>
+      )}
 
       {error && <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>}
 

@@ -3,12 +3,30 @@ import Link from 'next/link'
 import { getAccounts } from '@/lib/actions/accounts'
 import { getTransactions } from '@/lib/actions/transactions'
 import { getActiveFamily } from '@/lib/actions/families'
+import { getBudgetsWithActual } from '@/lib/actions/budgets'
+import { getGoals } from '@/lib/actions/goals'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Currency } from '@/components/ui/currency'
 import { TransactionRow } from '@/components/transactions/transaction-row'
 import { Skeleton } from '@/components/ui/skeleton'
 import { startOfMonth } from '@/lib/utils/dates'
 import { CreateFamilyForm } from '@/components/families/create-family-form'
+import { cn } from '@/lib/utils'
+import { ArrowRight } from 'lucide-react'
+
+// ─── Canadian registered-account contribution limits (2026) ──────────────────
+const REGISTERED_TYPES = new Set(['tfsa', 'rrsp', 'fhsa', 'resp'])
+const REGISTERED_LABELS: Record<string, string> = {
+  tfsa: 'TFSA',
+  rrsp: 'RRSP',
+  fhsa: 'FHSA',
+  resp: 'RESP',
+}
+const REGISTERED_ANNUAL_LIMIT: Record<string, number> = {
+  tfsa: 700000,
+  rrsp: 3381000,
+  fhsa: 800000,
+}
 
 async function DashboardContent() {
   const family = await getActiveFamily().catch(() => null)
@@ -27,23 +45,54 @@ async function DashboardContent() {
     )
   }
 
-  const [accounts, recentTxs] = await Promise.all([getAccounts(), getTransactions({ limit: 8 })])
+  const monthStart = startOfMonth()
+
+  const [accounts, recentTxs, monthlyTxs, budgets, goals] = await Promise.all([
+    getAccounts(),
+    getTransactions({ limit: 8 }),
+    getTransactions({ startDate: monthStart, limit: 500 }),
+    getBudgetsWithActual(monthStart),
+    getGoals(),
+  ])
 
   const netWorthCents = accounts.reduce(
-    (sum: number, acc: { type: string; balanceCents: number }) => {
-      return acc.type === 'credit' ? sum - acc.balanceCents : sum + acc.balanceCents
-    },
+    (sum: number, acc: { type: string; balanceCents: number }) =>
+      acc.type === 'credit' ? sum - acc.balanceCents : sum + acc.balanceCents,
     0
   )
 
-  const monthStart = startOfMonth()
-  const monthlyTxs = await getTransactions({ startDate: monthStart, limit: 500 })
   const monthlySpendingCents = monthlyTxs
     .filter((tx) => tx.amountCents < 0)
     .reduce((sum, tx) => sum + Math.abs(tx.amountCents), 0)
   const monthlyIncomeCents = monthlyTxs
     .filter((tx) => tx.amountCents > 0)
     .reduce((sum, tx) => sum + tx.amountCents, 0)
+  const netCents = monthlyIncomeCents - monthlySpendingCents
+
+  // Spending by category
+  const categorySpend: Map<string, { name: string; cents: number }> = new Map()
+  for (const tx of monthlyTxs) {
+    if (tx.amountCents >= 0) continue
+    const key = tx.category?.id ?? '__uncategorized__'
+    const name = tx.category?.name ?? 'Uncategorized'
+    const existing = categorySpend.get(key)
+    if (existing) {
+      existing.cents += Math.abs(tx.amountCents)
+    } else {
+      categorySpend.set(key, { name, cents: Math.abs(tx.amountCents) })
+    }
+  }
+  const topCategories = Array.from(categorySpend.values())
+    .sort((a, b) => b.cents - a.cents)
+    .slice(0, 6)
+
+  // Registered accounts with contribution room
+  const registeredAccounts = accounts.filter(
+    (a) => REGISTERED_TYPES.has(a.type) && a.contributionRoomCents != null
+  )
+
+  // Budget health: top categories by % consumed
+  const atRiskBudgets = budgets.filter((b) => b.percentUsed >= 70).slice(0, 5)
 
   return (
     <div className="space-y-6">
@@ -55,8 +104,8 @@ async function DashboardContent() {
       </div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <Card className="border-neutral-200">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <Card className="col-span-2 border-neutral-200 sm:col-span-1">
           <CardHeader className="pb-1">
             <CardTitle className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
               Net Worth
@@ -70,13 +119,13 @@ async function DashboardContent() {
         <Card className="border-neutral-200">
           <CardHeader className="pb-1">
             <CardTitle className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
-              Spending this month
+              Income
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Currency
-              cents={-monthlySpendingCents}
-              className="text-2xl font-semibold text-red-600"
+              cents={monthlyIncomeCents}
+              className="text-xl font-semibold text-emerald-600"
             />
           </CardContent>
         </Card>
@@ -84,32 +133,243 @@ async function DashboardContent() {
         <Card className="border-neutral-200">
           <CardHeader className="pb-1">
             <CardTitle className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
-              Income this month
+              Spending
             </CardTitle>
           </CardHeader>
           <CardContent>
             <Currency
-              cents={monthlyIncomeCents}
-              className="text-2xl font-semibold text-emerald-600"
+              cents={-monthlySpendingCents}
+              className="text-xl font-semibold text-red-600"
             />
+          </CardContent>
+        </Card>
+
+        <Card className="border-neutral-200">
+          <CardHeader className="pb-1">
+            <CardTitle className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
+              Net
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Currency cents={netCents} className="text-xl font-semibold" colorCode showSign />
           </CardContent>
         </Card>
       </div>
 
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Spending by category */}
+        {topCategories.length > 0 && (
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-700">
+                  Spending by category
+                </CardTitle>
+                <Link
+                  href="/transactions"
+                  className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+                >
+                  View all <ArrowRight className="size-3" />
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-0">
+              {topCategories.map((cat, i) => {
+                const pct = monthlySpendingCents > 0 ? (cat.cents / monthlySpendingCents) * 100 : 0
+                return (
+                  <div key={i} className="space-y-0.5">
+                    <div className="flex justify-between text-sm">
+                      <span className="truncate text-neutral-700">{cat.name}</span>
+                      <Currency
+                        cents={cat.cents}
+                        className="ml-2 shrink-0 text-sm text-neutral-700"
+                      />
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                      <div
+                        className="h-full rounded-full bg-blue-400"
+                        style={{ width: `${Math.min(pct, 100)}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Budget health */}
+        {atRiskBudgets.length > 0 && (
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-700">
+                  Budget health
+                </CardTitle>
+                <Link
+                  href="/budgets"
+                  className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+                >
+                  Manage <ArrowRight className="size-3" />
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              {atRiskBudgets.map((b) => (
+                <div key={b.id} className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="truncate text-sm text-neutral-700">{b.categoryName}</span>
+                    <span
+                      className={cn(
+                        'ml-2 shrink-0 text-xs font-medium',
+                        b.percentUsed >= 100 ? 'text-red-600' : 'text-amber-600'
+                      )}
+                    >
+                      {Math.round(b.percentUsed)}%
+                    </span>
+                  </div>
+                  <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                    <div
+                      className={cn(
+                        'h-full rounded-full',
+                        b.percentUsed >= 100 ? 'bg-red-500' : 'bg-amber-400'
+                      )}
+                      style={{ width: `${Math.min(b.percentUsed, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Goals progress */}
+        {goals.length > 0 && (
+          <Card className="border-neutral-200">
+            <CardHeader className="pb-2">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-medium text-neutral-700">
+                  Savings goals
+                </CardTitle>
+                <Link
+                  href="/goals"
+                  className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+                >
+                  View all <ArrowRight className="size-3" />
+                </Link>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-3 pt-0">
+              {goals.slice(0, 4).map((goal) => {
+                const current = goal.linkedAccount
+                  ? Math.max(0, goal.linkedAccount.balanceCents)
+                  : goal.currentAmountCents
+                const pct =
+                  goal.targetAmountCents > 0
+                    ? Math.min((current / goal.targetAmountCents) * 100, 100)
+                    : 0
+                return (
+                  <div key={goal.id} className="space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span className="truncate text-neutral-700">{goal.name}</span>
+                      <span className="ml-2 shrink-0 text-xs text-neutral-400">
+                        {Math.round(pct)}%
+                      </span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-neutral-100">
+                      <div
+                        className="h-full rounded-full bg-blue-400"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </div>
+                )
+              })}
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Canadian registered accounts */}
+      {registeredAccounts.length > 0 && (
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-sm font-medium text-neutral-700">Registered accounts</h2>
+            <Link
+              href="/accounts"
+              className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+            >
+              Manage <ArrowRight className="size-3" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {registeredAccounts.map((acc) => {
+              const annualLimit = REGISTERED_ANNUAL_LIMIT[acc.type]
+              const roomPct =
+                annualLimit && acc.contributionRoomCents != null
+                  ? Math.min((acc.contributionRoomCents / annualLimit) * 100, 100)
+                  : null
+              return (
+                <Link key={acc.id} href={`/accounts/${acc.slug ?? acc.id}`}>
+                  <Card className="h-full cursor-pointer border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm">
+                    <CardContent className="space-y-2 p-3">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={cn(
+                            'rounded-full px-2 py-0.5 text-xs font-semibold',
+                            'bg-violet-50 text-violet-700'
+                          )}
+                        >
+                          {REGISTERED_LABELS[acc.type] ?? acc.type.toUpperCase()}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="truncate text-xs text-neutral-500">{acc.name}</p>
+                        <Currency
+                          cents={acc.contributionRoomCents!}
+                          className="text-base font-semibold text-violet-700"
+                        />
+                        <p className="text-xs text-neutral-400">room remaining</p>
+                      </div>
+                      {roomPct !== null && (
+                        <div className="h-1 overflow-hidden rounded-full bg-violet-100">
+                          <div
+                            className="h-full rounded-full bg-violet-400"
+                            style={{ width: `${roomPct}%` }}
+                          />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Recent transactions */}
       <Card className="border-neutral-200">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-neutral-700">
-            Recent transactions
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-medium text-neutral-700">
+              Recent transactions
+            </CardTitle>
+            <Link
+              href="/transactions"
+              className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
+            >
+              View all <ArrowRight className="size-3" />
+            </Link>
+          </div>
         </CardHeader>
         <CardContent className="pt-0">
           {recentTxs.length === 0 ? (
             <p className="py-4 text-center text-sm text-neutral-400">
               No transactions yet.{' '}
-              <a href="/transactions/new" className="text-neutral-600 underline">
+              <Link href="/transactions/new" className="text-neutral-600 underline">
                 Add your first transaction
-              </a>
+              </Link>
             </p>
           ) : (
             recentTxs.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
@@ -127,15 +387,16 @@ function DashboardSkeleton() {
         <Skeleton className="h-6 w-40" />
         <Skeleton className="h-4 w-28" />
       </div>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        {[1, 2, 3].map((i) => (
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[1, 2, 3, 4].map((i) => (
           <Card key={i} className="border-neutral-200">
             <CardContent className="pt-6">
-              <Skeleton className="h-8 w-32" />
+              <Skeleton className="h-7 w-28" />
             </CardContent>
           </Card>
         ))}
       </div>
+      <Skeleton className="h-40 w-full" />
     </div>
   )
 }

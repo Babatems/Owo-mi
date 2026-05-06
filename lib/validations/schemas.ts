@@ -46,6 +46,8 @@ export const accountTypes = [
   'cash',
 ] as const
 
+export const registeredAccountTypes = ['tfsa', 'rrsp', 'fhsa', 'resp'] as const
+
 export const createAccountSchema = z.object({
   name: z.string().min(1, { error: 'Account name is required' }).trim(),
   type: z.enum(accountTypes, { error: 'Invalid account type' }),
@@ -54,9 +56,15 @@ export const createAccountSchema = z.object({
   institution: z.string().trim().optional(),
   last4: z
     .string()
-    .regex(/^\d{4}$/, { error: 'Last 4 digits must be exactly 4 numbers' })
-    .optional(),
+    .transform((v) => (v === '' ? undefined : v))
+    .pipe(
+      z
+        .string()
+        .regex(/^\d{4}$/, { error: 'Last 4 digits must be exactly 4 numbers' })
+        .optional()
+    ),
   notes: z.string().trim().optional(),
+  contributionRoomCents: z.number().int().min(0).optional(),
 })
 
 export const updateAccountSchema = createAccountSchema.partial().extend({
@@ -119,6 +127,10 @@ export const createBudgetSchema = z.object({
   periodStart: z.coerce.date({ error: 'Invalid period start date' }),
   amountCents: z.number().int().positive({ error: 'Budget amount must be positive' }),
   carryoverEnabled: z.boolean().default(false),
+})
+
+export const updateBudgetSchema = createBudgetSchema.partial().extend({
+  id: z.string().uuid(),
 })
 
 // ─── Savings Goals ────────────────────────────────────────────────────────────
