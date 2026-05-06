@@ -52,7 +52,9 @@ export default function SignUpPage() {
     <Card className="border-neutral-200 shadow-sm">
       <CardHeader>
         <CardTitle>Create your account</CardTitle>
-        <CardDescription>Start tracking your finances privately and securely.</CardDescription>
+        <CardDescription>
+          Join Owó-mi and start tracking your finances privately and securely.
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

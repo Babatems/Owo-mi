@@ -21,13 +21,7 @@ async function NewTransactionContent() {
       </div>
       <Card className="border-neutral-200">
         <CardContent className="pt-6">
-          <TransactionForm
-            accounts={accounts}
-            categories={categories}
-            onSuccess={() => {
-              /* redirect handled in form */
-            }}
-          />
+          <TransactionForm accounts={accounts} categories={categories} />
         </CardContent>
       </Card>
     </div>

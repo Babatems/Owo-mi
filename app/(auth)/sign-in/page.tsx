@@ -69,7 +69,7 @@ export default function SignInPage() {
     <Card className="border-neutral-200 shadow-sm">
       <CardHeader>
         <CardTitle>Sign in</CardTitle>
-        <CardDescription>Welcome back to Owo-mi.</CardDescription>
+        <CardDescription>Welcome back to Owó-mi.</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex rounded-md border border-neutral-200 text-sm">

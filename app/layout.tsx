@@ -16,7 +16,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Owo-mi — Canadian Budget Tracker',
+  title: 'Owó-mi — Canadian Budget Tracker',
   description: 'Private, secure personal finance management built for Canadians.',
 }
 

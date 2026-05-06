@@ -27,7 +27,7 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-56 flex-col border-r border-neutral-200 bg-white px-3 py-4">
       <div className="mb-6 px-2">
-        <span className="text-base font-semibold tracking-tight text-neutral-900">Owo-mi</span>
+        <span className="text-base font-semibold tracking-tight text-neutral-900">Owó-mi</span>
       </div>
 
       <nav className="flex-1 space-y-0.5">

@@ -1,7 +1,22 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Currency } from '@/components/ui/currency'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { AccountForm } from './account-form'
+import { deleteAccount } from '@/lib/actions/accounts'
+import { MoreHorizontal, Pencil, Trash2, ArrowRight } from 'lucide-react'
 
 const ACCOUNT_TYPE_LABELS: Record<string, string> = {
   checking: 'Chequing',
@@ -15,6 +30,18 @@ const ACCOUNT_TYPE_LABELS: Record<string, string> = {
   cash: 'Cash',
 }
 
+const ACCOUNT_TYPE_COLORS: Record<string, string> = {
+  checking: 'bg-blue-50 text-blue-700',
+  savings: 'bg-emerald-50 text-emerald-700',
+  credit: 'bg-rose-50 text-rose-700',
+  tfsa: 'bg-violet-50 text-violet-700',
+  rrsp: 'bg-amber-50 text-amber-700',
+  fhsa: 'bg-sky-50 text-sky-700',
+  resp: 'bg-orange-50 text-orange-700',
+  investment: 'bg-indigo-50 text-indigo-700',
+  cash: 'bg-neutral-100 text-neutral-600',
+}
+
 type Account = {
   id: string
   name: string
@@ -22,34 +49,99 @@ type Account = {
   balanceCents: number
   currency: string
   institution: string | null
+  last4?: string | null
+  notes?: string | null
 }
 
 export function AccountCard({ account }: { account: Account }) {
+  const router = useRouter()
+  const [editOpen, setEditOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+
+  async function handleDelete() {
+    if (!confirm(`Delete "${account.name}"? This cannot be undone.`)) return
+    setDeleting(true)
+    await deleteAccount(account.id)
+    router.refresh()
+  }
+
   return (
-    <Link href={`/accounts/${account.id}`}>
-      <Card className="cursor-pointer border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm">
+    <>
+      <Card className="group relative border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm">
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p className="truncate font-medium text-neutral-900">{account.name}</p>
+            <div className="min-w-0 flex-1">
+              <p className="truncate font-semibold text-neutral-900">{account.name}</p>
               {account.institution && (
                 <p className="mt-0.5 truncate text-xs text-neutral-400">{account.institution}</p>
               )}
+              {account.last4 && (
+                <p className="mt-0.5 text-xs text-neutral-400">····{account.last4}</p>
+              )}
             </div>
-            <Badge variant="secondary" className="shrink-0 text-xs">
-              {ACCOUNT_TYPE_LABELS[account.type] ?? account.type}
-            </Badge>
+
+            <div className="flex items-center gap-1.5">
+              <span
+                className={`rounded-full px-2 py-0.5 text-xs font-medium ${ACCOUNT_TYPE_COLORS[account.type] ?? 'bg-neutral-100 text-neutral-600'}`}
+              >
+                {ACCOUNT_TYPE_LABELS[account.type] ?? account.type}
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <MoreHorizontal className="size-4" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-40">
+                  <DropdownMenuItem onClick={() => setEditOpen(true)}>
+                    <Pencil className="mr-2 size-3.5" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push(`/accounts/${account.id}`)}>
+                    <ArrowRight className="mr-2 size-3.5" />
+                    View transactions
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={handleDelete}
+                    disabled={deleting}
+                    className="text-red-600 focus:text-red-600"
+                  >
+                    <Trash2 className="mr-2 size-3.5" />
+                    {deleting ? 'Deleting…' : 'Delete'}
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
           </div>
-          <div className="mt-3">
+
+          <Link href={`/accounts/${account.id}`} className="mt-4 block">
             <Currency
               cents={account.balanceCents}
               currency={account.currency}
-              className="text-xl"
+              className="text-2xl font-semibold"
               colorCode={account.type === 'credit'}
             />
-          </div>
+            <p className="mt-0.5 text-xs text-neutral-400">Current balance</p>
+          </Link>
         </CardContent>
       </Card>
-    </Link>
+
+      <Dialog open={editOpen} onOpenChange={setEditOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Edit account</DialogTitle>
+          </DialogHeader>
+          <AccountForm
+            account={account}
+            onSuccess={() => {
+              setEditOpen(false)
+              router.refresh()
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+    </>
   )
 }
