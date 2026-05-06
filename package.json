@@ -9,9 +9,9 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
+    "db:migrate": "node scripts/migrate.mjs",
     "db:studio": "drizzle-kit studio",
-    "prepare": "husky"
+    "prepare": "node -e \"if(!process.env.CI && !process.env.VERCEL){require('child_process').execSync('husky',{stdio:'inherit'})}\""
   },
   "lint-staged": {
     "*.{ts,tsx}": [
