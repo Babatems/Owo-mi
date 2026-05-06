@@ -8,7 +8,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: 'pg', schema: authSchema }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
+    requireEmailVerification: false, // TODO: re-enable once Resend email provider is integrated
   },
   plugins: [
     twoFactor({

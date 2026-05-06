@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { getAccounts } from '@/lib/actions/accounts'
 import { getTransactions } from '@/lib/actions/transactions'
 import { getActiveFamily } from '@/lib/actions/families'
@@ -7,13 +8,26 @@ import { Currency } from '@/components/ui/currency'
 import { TransactionRow } from '@/components/transactions/transaction-row'
 import { Skeleton } from '@/components/ui/skeleton'
 import { startOfMonth } from '@/lib/utils/dates'
+import { CreateFamilyForm } from '@/components/families/create-family-form'
 
 async function DashboardContent() {
-  const [accounts, recentTxs, family] = await Promise.all([
-    getAccounts(),
-    getTransactions({ limit: 8 }),
-    getActiveFamily(),
-  ])
+  const family = await getActiveFamily()
+
+  if (!family) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <h1 className="text-xl font-semibold text-neutral-900">Welcome to Owo-mi</h1>
+        <p className="mt-2 text-sm text-neutral-500">
+          Create a family to start tracking your finances.
+        </p>
+        <div className="mt-6 w-full max-w-sm">
+          <CreateFamilyForm />
+        </div>
+      </div>
+    )
+  }
+
+  const [accounts, recentTxs] = await Promise.all([getAccounts(), getTransactions({ limit: 8 })])
 
   const netWorthCents = accounts.reduce(
     (sum: number, acc: { type: string; balanceCents: number }) => {

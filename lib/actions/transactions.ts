@@ -14,7 +14,8 @@ import type { ActionResult } from './utils'
 import type { TransactionFilters } from '@/lib/validations/schemas'
 
 export async function getTransactions(rawFilters?: Partial<TransactionFilters>) {
-  const familyId = await getActiveFamilyId()
+  const familyId = await getActiveFamilyId().catch(() => null)
+  if (!familyId) return []
   const filters = transactionFiltersSchema.parse(rawFilters ?? {})
   const { page, limit, accountId, categoryId, startDate, endDate, search } = filters
 
@@ -68,23 +69,28 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
 
   const { tagIds, ...txData } = parsed.data
 
-  // Auto-categorize if no category provided
-  let categoryId = txData.categoryId
-  if (!categoryId) {
-    categoryId = await applyCategorizationRules(familyId, txData.description, txData.amountCents)
-  }
-
-  const [tx] = await withFamilyContext(familyId, () =>
-    db
-      .insert(transactions)
-      .values({ ...txData, categoryId, familyId })
-      .returning({ id: transactions.id })
+  const { id: txId, categoryId: resolvedCategoryId } = await withFamilyContext(
+    familyId,
+    async () => {
+      // Auto-categorize inside the RLS context so categorization_rules are visible
+      let categoryId = txData.categoryId
+      if (!categoryId) {
+        categoryId = await applyCategorizationRules(
+          familyId,
+          txData.description,
+          txData.amountCents
+        )
+      }
+      const [row] = await db
+        .insert(transactions)
+        .values({ ...txData, categoryId, familyId })
+        .returning({ id: transactions.id })
+      return { id: row.id, categoryId }
+    }
   )
 
   if (tagIds?.length) {
-    await db
-      .insert(transactionTags)
-      .values(tagIds.map((tagId) => ({ transactionId: tx.id, tagId })))
+    await db.insert(transactionTags).values(tagIds.map((tagId) => ({ transactionId: txId, tagId })))
   }
 
   await writeAuditLog({
@@ -92,13 +98,13 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
     userId: session.user.id,
     action: 'CREATE',
     resourceType: 'transaction',
-    resourceId: tx.id,
-    newValue: { ...txData, categoryId },
+    resourceId: txId,
+    newValue: { ...txData, categoryId: resolvedCategoryId },
   })
 
   revalidatePath('/transactions')
   revalidatePath('/')
-  return { success: true, data: { id: tx.id } }
+  return { success: true, data: { id: txId } }
 }
 
 export async function updateTransaction(input: unknown): Promise<ActionResult<void>> {

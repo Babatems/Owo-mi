@@ -37,7 +37,7 @@ export default function SignUpPage() {
       })
       if (authError) throw new Error(authError.message)
 
-      const result = await createFamily(`${values.name}'s Family`)
+      const result = await createFamily({ name: `${values.name}'s Family` })
       if (!result.success) throw new Error(result.error)
 
       router.push('/')

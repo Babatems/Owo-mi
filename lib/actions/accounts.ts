@@ -9,7 +9,8 @@ import { getSession, getActiveFamilyId, withFamilyContext, writeAuditLog } from 
 import type { ActionResult } from './utils'
 
 export async function getAccounts() {
-  const familyId = await getActiveFamilyId()
+  const familyId = await getActiveFamilyId().catch(() => null)
+  if (!familyId) return []
   return withFamilyContext(familyId, () =>
     db.query.financialAccounts.findMany({
       where: and(eq(financialAccounts.familyId, familyId), isNull(financialAccounts.deletedAt)),

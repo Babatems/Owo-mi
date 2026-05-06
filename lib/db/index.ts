@@ -13,7 +13,7 @@ function createDb() {
       typeof drizzle<typeof schema>
     >
   }
-  const client = postgres(DATABASE_URL, { max: 1 })
+  const client = postgres(DATABASE_URL, { max: 1, ssl: 'require' })
   return drizzle(client, { schema })
 }
 

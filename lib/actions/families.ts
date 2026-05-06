@@ -18,7 +18,17 @@ export async function createFamily(input: unknown): Promise<ActionResult<{ id: s
 
   const org = await auth.api.createOrganization({
     headers: await headers(),
-    body: { name: parsed.data.name, slug: parsed.data.name.toLowerCase().replace(/\s+/g, '-') },
+    body: {
+      name: parsed.data.name,
+      slug:
+        parsed.data.name
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-') +
+        '-' +
+        Date.now(),
+    },
   })
 
   await seedDefaultCategories(org.id)

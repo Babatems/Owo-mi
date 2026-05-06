@@ -15,11 +15,18 @@ export async function getSession() {
 }
 
 export async function getActiveFamilyId(): Promise<string> {
-  const session = await getSession()
   const orgs = await auth.api.listOrganizations({ headers: await headers() })
   const org = orgs?.[0]
-  if (!org) throw new Error('No family found. Please create or join a family first.')
+  if (!org) throw new Error('NO_FAMILY')
   return org.id
+}
+
+export async function getActiveFamilyIdOrNull(): Promise<string | null> {
+  try {
+    return await getActiveFamilyId()
+  } catch {
+    return null
+  }
 }
 
 export async function withFamilyContext<T>(familyId: string, fn: () => Promise<T>): Promise<T> {
