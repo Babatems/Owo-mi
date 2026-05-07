@@ -14,13 +14,7 @@ import { createAccount, updateAccount } from '@/lib/actions/accounts'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { parseCurrencyInput } from '@/lib/utils/currency'
 
 const REGISTERED_TYPES = new Set(['tfsa', 'rrsp', 'fhsa', 'resp'])
@@ -137,7 +131,9 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
           }}
         >
           <SelectTrigger id="acc-type">
-            <SelectValue />
+            <span className="flex flex-1 text-left text-sm">
+              {ACCOUNT_TYPE_LABELS[selectedType] ?? selectedType}
+            </span>
           </SelectTrigger>
           <SelectContent>
             {accountTypes.map((type) => (

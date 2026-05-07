@@ -10,13 +10,7 @@ import { createGoal, updateGoal } from '@/lib/actions/goals'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { parseCurrencyInput } from '@/lib/utils/currency'
 
 type Account = { id: string; name: string; type: string }
@@ -138,7 +132,13 @@ export function GoalForm({ accounts, goal, onSuccess }: GoalFormProps) {
             }}
           >
             <SelectTrigger id="goal-account">
-              <SelectValue placeholder="None" />
+              <span className="flex flex-1 text-left text-sm">
+                {selectedAccountId ? (
+                  (savingsAccounts.find((a) => a.id === selectedAccountId)?.name ?? 'None')
+                ) : (
+                  <span className="text-neutral-400">None</span>
+                )}
+              </span>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">None</SelectItem>

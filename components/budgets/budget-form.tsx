@@ -10,13 +10,14 @@ import { createBudget, updateBudget } from '@/lib/actions/budgets'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
+
+const PERIOD_LABELS: Record<string, string> = {
+  monthly: 'Monthly',
+  biweekly: 'Bi-weekly',
+  weekly: 'Weekly',
+  yearly: 'Yearly',
+}
 import { parseCurrencyInput } from '@/lib/utils/currency'
 import { toDateInputValue } from '@/lib/utils/dates'
 
@@ -96,7 +97,11 @@ export function BudgetForm({ categories, budget, onSuccess }: BudgetFormProps) {
           }}
         >
           <SelectTrigger id="budget-category">
-            <SelectValue placeholder="Select a category" />
+            <span className="flex flex-1 text-left text-sm">
+              {expenseCategories.find((c) => c.id === selectedCategoryId)?.name ?? (
+                <span className="text-neutral-400">Select a category</span>
+              )}
+            </span>
           </SelectTrigger>
           <SelectContent>
             {expenseCategories.length === 0 ? (
@@ -149,7 +154,9 @@ export function BudgetForm({ categories, budget, onSuccess }: BudgetFormProps) {
           }}
         >
           <SelectTrigger id="budget-period-type">
-            <SelectValue />
+            <span className="flex flex-1 text-left text-sm">
+              {PERIOD_LABELS[selectedPeriodType] ?? selectedPeriodType}
+            </span>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="monthly">Monthly</SelectItem>
