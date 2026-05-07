@@ -136,7 +136,7 @@ function SignUpForm() {
           </Button>
         </form>
 
-        <p className="mt-4 text-center text-sm text-neutral-500">
+        <p className="mt-4 text-center text-sm text-neutral-500 dark:text-neutral-400">
           Already have an account?{' '}
           <Link
             href="/sign-in"
@@ -146,7 +146,7 @@ function SignUpForm() {
           </Link>
         </p>
 
-        <p className="mt-6 text-center text-xs text-neutral-400">
+        <p className="mt-6 text-center text-xs text-neutral-400 dark:text-neutral-500">
           Your data is stored in Canada and never sold.
         </p>
       </CardContent>

@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import { authClient, useSession } from '@/lib/auth/client'
@@ -15,12 +16,14 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Menu, Sun, Moon } from 'lucide-react'
 import { Sidebar } from './sidebar'
+import { SignOutOverlay } from '@/components/auth/sign-out-overlay'
 import { cn } from '@/lib/utils'
 
 export function Header() {
   const { data: session } = useSession()
   const router = useRouter()
   const { theme, setTheme } = useTheme()
+  const [signingOut, setSigningOut] = useState(false)
 
   function handleThemeToggle(e: React.MouseEvent<HTMLButtonElement>) {
     const rect = e.currentTarget.getBoundingClientRect()
@@ -44,63 +47,67 @@ export function Header() {
     .toUpperCase()
 
   async function handleSignOut() {
+    setSigningOut(true)
     await authClient.signOut()
     router.push('/en')
   }
 
   return (
-    <header className="flex h-14 items-center gap-3 border-b border-neutral-200 bg-white px-4 dark:border-neutral-800 dark:bg-neutral-950">
-      {/* Mobile: hamburger + sheet */}
-      <Sheet>
-        <SheetTrigger
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'md:hidden')}
+    <>
+      <SignOutOverlay visible={signingOut} />
+      <header className="flex h-14 items-center gap-3 border-b border-neutral-200 bg-white px-4 dark:border-neutral-800 dark:bg-neutral-950">
+        {/* Mobile: hamburger + sheet */}
+        <Sheet>
+          <SheetTrigger
+            className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'md:hidden')}
+          >
+            <Menu className="size-5" />
+          </SheetTrigger>
+          <SheetContent side="left" className="w-56 p-0">
+            <Sidebar />
+          </SheetContent>
+        </Sheet>
+
+        <div className="flex-1" />
+
+        {/* Theme toggle */}
+        <button
+          onClick={handleThemeToggle}
+          className="flex size-9 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
+          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          suppressHydrationWarning
         >
-          <Menu className="size-5" />
-        </SheetTrigger>
-        <SheetContent side="left" className="w-56 p-0">
-          <Sidebar />
-        </SheetContent>
-      </Sheet>
+          <span className="flex items-center justify-center rounded-md p-1.5 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
+            {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+          </span>
+        </button>
 
-      <div className="flex-1" />
-
-      {/* Theme toggle */}
-      <button
-        onClick={handleThemeToggle}
-        className="flex size-9 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
-        aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        suppressHydrationWarning
-      >
-        <span className="flex items-center justify-center rounded-md p-1.5 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
-          {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
-        </span>
-      </button>
-
-      {/* User menu */}
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'rounded-full')}
-        >
-          <Avatar className="size-8">
-            <AvatarFallback className="bg-neutral-100 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
-              {initials ?? '?'}
-            </AvatarFallback>
-          </Avatar>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <div className="truncate px-2 py-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-            {session?.user?.email}
-          </div>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
-            Settings
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-            Sign out
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </header>
+        {/* User menu */}
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'rounded-full')}
+          >
+            <Avatar className="size-8">
+              <AvatarFallback className="bg-neutral-100 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                {initials ?? '?'}
+              </AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <div className="truncate px-2 py-1.5 text-xs text-neutral-500 dark:text-neutral-400">
+              {session?.user?.email}
+            </div>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
+              Settings
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+              Sign out
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </header>
+    </>
   )
 }

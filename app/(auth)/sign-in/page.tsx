@@ -87,9 +87,12 @@ export default function SignInPage() {
 
         <Separator />
 
-        <p className="text-center text-sm text-neutral-500">
+        <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
           No account?{' '}
-          <Link href="/sign-up" className="font-medium text-neutral-900 hover:underline">
+          <Link
+            href="/sign-up"
+            className="font-medium text-neutral-900 hover:underline dark:text-white"
+          >
             Sign up
           </Link>
         </p>

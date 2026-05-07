@@ -5,21 +5,25 @@ import { useRouter } from 'next/navigation'
 import { authClient } from '@/lib/auth/client'
 import { Button } from '@/components/ui/button'
 import { LogOut } from 'lucide-react'
+import { SignOutOverlay } from '@/components/auth/sign-out-overlay'
 
 export function SignOutButton() {
   const router = useRouter()
-  const [loading, setLoading] = useState(false)
+  const [signingOut, setSigningOut] = useState(false)
 
   async function handleSignOut() {
-    setLoading(true)
+    setSigningOut(true)
     await authClient.signOut()
-    router.push('/sign-in')
+    router.push('/en')
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={handleSignOut} disabled={loading}>
-      <LogOut className="mr-2 size-4" />
-      {loading ? 'Signing out…' : 'Sign out'}
-    </Button>
+    <>
+      <SignOutOverlay visible={signingOut} />
+      <Button variant="outline" size="sm" onClick={handleSignOut} disabled={signingOut}>
+        <LogOut className="mr-2 size-4" />
+        Sign out
+      </Button>
+    </>
   )
 }
