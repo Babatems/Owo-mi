@@ -97,7 +97,7 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
               <p className="truncate font-semibold text-neutral-900">{goal.name}</p>
               {goal.linkedAccount && (
                 <p className="mt-0.5 text-xs text-neutral-400">
-                  Linked to {goal.linkedAccount.name}
+                  Auto-tracking · {goal.linkedAccount.name}
                 </p>
               )}
             </div>
@@ -112,10 +112,12 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
                   <MoreHorizontal className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
-                  <DropdownMenuItem onClick={() => setProgressOpen(true)}>
-                    <TrendingUp className="mr-2 size-3.5" />
-                    Update progress
-                  </DropdownMenuItem>
+                  {!goal.linkedAccount && (
+                    <DropdownMenuItem onClick={() => setProgressOpen(true)}>
+                      <TrendingUp className="mr-2 size-3.5" />
+                      Update progress
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem onClick={() => setEditOpen(true)}>
                     <Pencil className="mr-2 size-3.5" />
                     Edit goal

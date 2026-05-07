@@ -22,10 +22,16 @@ type Account = { id: string; name: string; type: string }
 interface TransactionFormProps {
   accounts: Account[]
   categories: CategoryTree[]
+  defaultAccountId?: string
   onSuccess?: () => void
 }
 
-export function TransactionForm({ accounts, categories, onSuccess }: TransactionFormProps) {
+export function TransactionForm({
+  accounts,
+  categories,
+  defaultAccountId,
+  onSuccess,
+}: TransactionFormProps) {
   const router = useRouter()
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
@@ -36,7 +42,7 @@ export function TransactionForm({ accounts, categories, onSuccess }: Transaction
     // Cast needed: Zod v4 coerce resolver uses input type while useForm uses output type
     resolver: zodResolver(createTransactionSchema) as Resolver<CreateTransactionInput>,
     defaultValues: {
-      accountId: accounts[0]?.id ?? '',
+      accountId: defaultAccountId ?? accounts[0]?.id ?? '',
       amountCents: 0,
       currency: 'CAD',
       date: new Date(),
@@ -51,8 +57,12 @@ export function TransactionForm({ accounts, categories, onSuccess }: Transaction
       const finalAmount = isExpense ? -Math.abs(values.amountCents) : Math.abs(values.amountCents)
       const result = await createTransaction({ ...values, amountCents: finalAmount })
       if (!result.success) throw new Error(result.error)
-      router.push('/transactions')
-      onSuccess?.()
+      if (onSuccess) {
+        onSuccess()
+        router.refresh()
+      } else {
+        router.push('/transactions')
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save transaction')
     } finally {

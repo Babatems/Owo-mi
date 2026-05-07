@@ -4,18 +4,10 @@ import { getCategoriesFlat } from '@/lib/actions/categories'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Currency } from '@/components/ui/currency'
 import { BudgetCategoryRow } from '@/components/budgets/budget-category-row'
-import { BudgetForm } from '@/components/budgets/budget-form'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { buttonVariants } from '@/components/ui/button'
+import { AddBudgetButton } from '@/components/budgets/add-budget-button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { Plus, AlertCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 
 async function BudgetContent() {
   const now = new Date()
@@ -42,18 +34,7 @@ async function BudgetContent() {
           <h1 className="text-xl font-semibold text-neutral-900">Budget</h1>
           <p className="mt-0.5 text-sm text-neutral-500">{monthLabel}</p>
         </div>
-        <Dialog>
-          <DialogTrigger className={cn(buttonVariants({ size: 'sm' }), 'gap-1.5')}>
-            <Plus className="size-4" />
-            Add budget
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Add budget</DialogTitle>
-            </DialogHeader>
-            <BudgetForm categories={categories} />
-          </DialogContent>
-        </Dialog>
+        <AddBudgetButton categories={categories} />
       </div>
 
       {/* Over-budget alert */}

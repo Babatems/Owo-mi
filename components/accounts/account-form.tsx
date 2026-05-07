@@ -85,7 +85,6 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
       balanceCents: account?.balanceCents ?? 0,
       currency: account?.currency ?? 'CAD',
       institution: account?.institution ?? '',
-      last4: account?.last4 ?? '',
       contributionRoomCents: account?.contributionRoomCents ?? undefined,
     },
   })
@@ -170,11 +169,6 @@ export function AccountForm({ account, onSuccess }: AccountFormProps) {
           placeholder="e.g. RBC, TD, Scotiabank"
           {...form.register('institution')}
         />
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="acc-last4">Last 4 digits (optional)</Label>
-        <Input id="acc-last4" placeholder="e.g. 4321" maxLength={4} {...form.register('last4')} />
       </div>
 
       {REGISTERED_TYPES.has(selectedType) && (

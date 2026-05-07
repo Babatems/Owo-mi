@@ -2,19 +2,9 @@ import { Suspense } from 'react'
 import { getGoals } from '@/lib/actions/goals'
 import { getAccounts } from '@/lib/actions/accounts'
 import { GoalCard } from '@/components/goals/goal-card'
-import { GoalForm } from '@/components/goals/goal-form'
+import { AddGoalButton } from '@/components/goals/add-goal-button'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { buttonVariants } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { cn } from '@/lib/utils'
-import { Plus } from 'lucide-react'
 
 async function GoalsList() {
   const [goals, accounts] = await Promise.all([getGoals(), getAccounts()])
@@ -34,18 +24,7 @@ async function GoalsList() {
             {goals.length} goal{goals.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger className={cn(buttonVariants({ size: 'sm' }), 'gap-1.5')}>
-            <Plus className="size-4" />
-            New goal
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Create savings goal</DialogTitle>
-            </DialogHeader>
-            <GoalForm accounts={accountsMini} />
-          </DialogContent>
-        </Dialog>
+        <AddGoalButton accounts={accountsMini} />
       </div>
 
       {goals.length === 0 ? (

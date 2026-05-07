@@ -6,6 +6,7 @@ import { getTransactions } from '@/lib/actions/transactions'
 import { getCategories } from '@/lib/actions/categories'
 import { Currency } from '@/components/ui/currency'
 import { TransactionRow } from '@/components/transactions/transaction-row'
+import { AddTransactionButton } from '@/components/accounts/add-transaction-button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -71,9 +72,15 @@ async function AccountDetail({ slug }: { slug: string }) {
 
       <Card className="border-neutral-200">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-neutral-700">
-            Transactions ({txs.length})
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm font-medium text-neutral-700">
+              Transactions ({txs.length})
+            </CardTitle>
+            <AddTransactionButton
+              account={{ id: account.id, name: account.name, type: account.type }}
+              categories={categories}
+            />
+          </div>
         </CardHeader>
         <CardContent className="pt-0">
           {txs.length === 0 ? (

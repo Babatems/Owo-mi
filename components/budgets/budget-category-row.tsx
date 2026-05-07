@@ -82,7 +82,7 @@ export function BudgetCategoryRow({ budget, categories }: BudgetCategoryRowProps
           {varianceBadge(budget.percentUsed, budget.remainingCents)}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700">
+            <DropdownMenuTrigger className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700">
               <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-36">
