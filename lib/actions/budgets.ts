@@ -74,7 +74,7 @@ export async function getBudgetsWithActual(monthStart?: Date): Promise<BudgetWit
             eq(transactions.familyId, familyId),
             eq(transactions.categoryId, budget.categoryId),
             isNull(transactions.deletedAt),
-            lt(transactions.amountCents, sql`0`),
+            lt(transactions.amountCents, 0),
             gte(transactions.date, budget.periodStart),
             lt(transactions.date, periodEnd)
           )
