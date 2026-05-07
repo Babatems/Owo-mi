@@ -35,7 +35,7 @@ async function AccountDetail({ slug }: { slug: string }) {
   return (
     <div className="space-y-6">
       <div>
-        <Link href="/accounts">
+        <Link href="/dashboard/accounts">
           <Button
             variant="ghost"
             size="sm"

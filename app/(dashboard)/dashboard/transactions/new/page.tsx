@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { getAccounts } from '@/lib/actions/accounts'
 import { getCategories } from '@/lib/actions/categories'
 import { TransactionForm } from '@/components/transactions/transaction-form'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
 async function NewTransactionContent() {

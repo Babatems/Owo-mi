@@ -2,7 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
-@custom-variant dark (&:is(.dark *));
+@custom-variant dark (&:is(.dark, .dark *));
 
 @theme inline {
   --color-background: var(--background);
@@ -117,6 +117,16 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+:root {
+  --brand: #0e6b4f;
+  --brand-light: #e8f5ef;
+  --brand-fg: #ffffff;
+  --marketing-bg: #fafaf7;
+  --marketing-bg-dark: #0e0f12;
+  --navy: #16213e;
+  --lime: #c7f23d;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -126,5 +136,51 @@
   }
   html {
     @apply font-sans;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .marketing-bg {
+    background-color: var(--marketing-bg);
+  }
+  .dark .marketing-bg {
+    background-color: var(--marketing-bg-dark);
+  }
+
+  /* Scroll-driven section reveal — compositor only, zero INP cost */
+  .reveal-on-scroll {
+    animation: reveal-fade linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+
+  @supports not (animation-timeline: view()) {
+    /* Fallback: just show the element */
+    .reveal-on-scroll {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@keyframes reveal-fade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

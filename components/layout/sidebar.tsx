@@ -13,12 +13,12 @@ import {
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { label: 'Accounts', href: '/accounts', icon: CreditCard },
-  { label: 'Transactions', href: '/transactions', icon: ArrowLeftRight },
-  { label: 'Budgets', href: '/budgets', icon: PieChart },
-  { label: 'Goals', href: '/goals', icon: Target },
-  { label: 'Settings', href: '/settings', icon: Settings },
+  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { label: 'Accounts', href: '/dashboard/accounts', icon: CreditCard },
+  { label: 'Transactions', href: '/dashboard/transactions', icon: ArrowLeftRight },
+  { label: 'Budgets', href: '/dashboard/budgets', icon: PieChart },
+  { label: 'Goals', href: '/dashboard/goals', icon: Target },
+  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 
 export function Sidebar() {
@@ -32,7 +32,8 @@ export function Sidebar() {
 
       <nav className="flex-1 space-y-0.5">
         {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
-          const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
+          const active =
+            href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href)
           return (
             <Link
               key={href}

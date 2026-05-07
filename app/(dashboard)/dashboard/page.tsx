@@ -168,7 +168,7 @@ async function DashboardContent() {
                   Spending by category
                 </CardTitle>
                 <Link
-                  href="/transactions"
+                  href="/dashboard/transactions"
                   className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
                 >
                   View all <ArrowRight className="size-3" />
@@ -209,7 +209,7 @@ async function DashboardContent() {
                   Budget health
                 </CardTitle>
                 <Link
-                  href="/budgets"
+                  href="/dashboard/budgets"
                   className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
                 >
                   Manage <ArrowRight className="size-3" />
@@ -254,7 +254,7 @@ async function DashboardContent() {
                   Savings goals
                 </CardTitle>
                 <Link
-                  href="/goals"
+                  href="/dashboard/goals"
                   className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
                 >
                   View all <ArrowRight className="size-3" />
@@ -298,7 +298,7 @@ async function DashboardContent() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-sm font-medium text-neutral-700">Registered accounts</h2>
             <Link
-              href="/accounts"
+              href="/dashboard/accounts"
               className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
             >
               Manage <ArrowRight className="size-3" />
@@ -358,7 +358,7 @@ async function DashboardContent() {
               Recent transactions
             </CardTitle>
             <Link
-              href="/transactions"
+              href="/dashboard/transactions"
               className="flex items-center gap-1 text-xs text-neutral-400 transition-colors hover:text-neutral-600"
             >
               View all <ArrowRight className="size-3" />
@@ -369,7 +369,7 @@ async function DashboardContent() {
           {recentTxs.length === 0 ? (
             <p className="py-4 text-center text-sm text-neutral-400">
               No transactions yet.{' '}
-              <Link href="/transactions/new" className="text-neutral-600 underline">
+              <Link href="/dashboard/transactions/new" className="text-neutral-600 underline">
                 Add your first transaction
               </Link>
             </p>

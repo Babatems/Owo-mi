@@ -28,13 +28,13 @@ async function TransactionsList() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Link href="/transactions/import">
+          <Link href="/dashboard/transactions/import">
             <Button size="sm" variant="outline" className="gap-1.5">
               <Upload className="size-4" />
               Import
             </Button>
           </Link>
-          <Link href="/transactions/new">
+          <Link href="/dashboard/transactions/new">
             <Button size="sm" className="gap-1.5">
               <Plus className="size-4" />
               Add
@@ -48,7 +48,7 @@ async function TransactionsList() {
           {txs.length === 0 ? (
             <div className="py-10 text-center">
               <p className="text-sm text-neutral-500">No transactions yet.</p>
-              <Link href="/transactions/new">
+              <Link href="/dashboard/transactions/new">
                 <Button variant="outline" size="sm" className="mt-3">
                   Add your first transaction
                 </Button>
