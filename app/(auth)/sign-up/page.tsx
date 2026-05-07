@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,9 +17,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 type SignUpValues = z.infer<typeof signUpSchema>
 
 export default function SignUpPage() {
-  const router = useRouter()
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next')
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
+  const [emailSent, setEmailSent] = useState<string>()
 
   const form = useForm<SignUpValues>({
     resolver: zodResolver(signUpSchema),
@@ -40,12 +42,37 @@ export default function SignUpPage() {
       const result = await createFamily({ name: `${values.name}'s Family` })
       if (!result.success) throw new Error(result.error)
 
-      router.push('/dashboard')
+      setEmailSent(values.email)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (emailSent) {
+    return (
+      <Card className="border-neutral-200 shadow-sm">
+        <CardHeader>
+          <CardTitle>Check your email</CardTitle>
+          <CardDescription>We sent a confirmation link to {emailSent}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            Click the link in the email to activate your account, then come back to sign in.
+          </p>
+          <Link
+            href={next ? `/sign-in?next=${encodeURIComponent(next)}` : '/sign-in'}
+            className="block w-full rounded-md bg-neutral-900 px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-100"
+          >
+            Go to sign in
+          </Link>
+          <p className="text-center text-xs text-neutral-400">
+            Didn&apos;t receive it? Check your spam folder.
+          </p>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -103,7 +130,10 @@ export default function SignUpPage() {
 
         <p className="mt-4 text-center text-sm text-neutral-500">
           Already have an account?{' '}
-          <Link href="/sign-in" className="font-medium text-neutral-900 hover:underline">
+          <Link
+            href="/sign-in"
+            className="font-medium text-neutral-900 hover:underline dark:text-white"
+          >
             Sign in
           </Link>
         </p>

@@ -30,7 +30,7 @@ function MockTransactionList() {
               <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
                 {tx.name}
               </p>
-              <p className="text-xs text-neutral-400">{tx.cat}</p>
+              <p className="text-xs text-neutral-400 dark:text-neutral-300">{tx.cat}</p>
             </div>
             <p
               className="font-mono text-sm font-semibold tabular-nums"

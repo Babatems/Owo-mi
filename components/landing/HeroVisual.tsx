@@ -73,7 +73,7 @@ export function HeroVisual() {
 
           {/* Transactions */}
           <div className="px-5 pt-3 pb-4">
-            <p className="mb-3 text-xs font-semibold tracking-wider text-neutral-400 uppercase dark:text-neutral-500">
+            <p className="mb-3 text-xs font-semibold tracking-wider text-neutral-400 uppercase dark:text-neutral-400">
               Recent transactions
             </p>
             <div className="space-y-3">
@@ -89,7 +89,7 @@ export function HeroVisual() {
                     <p className="truncate text-sm font-medium text-neutral-900 dark:text-white">
                       {tx.name}
                     </p>
-                    <p className="text-xs text-neutral-400">{tx.category}</p>
+                    <p className="text-xs text-neutral-400 dark:text-neutral-300">{tx.category}</p>
                   </div>
                   <div className="text-right">
                     <p
@@ -98,7 +98,7 @@ export function HeroVisual() {
                     >
                       {formatCAD(tx.amount)}
                     </p>
-                    <p className="text-xs text-neutral-400 dark:text-neutral-500">{tx.date}</p>
+                    <p className="text-xs text-neutral-400 dark:text-neutral-300">{tx.date}</p>
                   </div>
                 </div>
               ))}
@@ -137,7 +137,7 @@ export function HeroVisual() {
           initial={{ opacity: 0, x: 20, y: -10 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="absolute top-8 -right-4 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg sm:block dark:border-neutral-700 dark:bg-neutral-800"
+          className="absolute top-8 -right-4 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
         >
           <p className="text-xs font-semibold text-[var(--brand)]">🇨🇦 Data in Canada</p>
         </motion.div>
@@ -147,7 +147,7 @@ export function HeroVisual() {
           initial={{ opacity: 0, x: -20, y: 10 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
-          className="absolute bottom-16 -left-4 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg sm:block dark:border-neutral-700 dark:bg-neutral-800"
+          className="absolute bottom-16 -left-4 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
         >
           <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-200">
             ✓ Read-only access

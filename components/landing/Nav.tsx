@@ -74,11 +74,13 @@ export function LandingNav() {
           {/* Theme toggle */}
           <button
             onClick={handleThemeToggle}
-            className="flex size-9 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
+            className="flex size-9 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             suppressHydrationWarning
           >
-            {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            <span className="flex items-center justify-center rounded-md p-1.5 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
+              {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            </span>
           </button>
 
           <Link
@@ -101,11 +103,13 @@ export function LandingNav() {
         <div className="flex items-center gap-1 md:hidden">
           <button
             onClick={handleThemeToggle}
-            className="flex size-9 items-center justify-center rounded-md text-neutral-500 dark:text-neutral-400"
+            className="flex size-9 items-center justify-center text-neutral-500 dark:text-neutral-400"
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             suppressHydrationWarning
           >
-            {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            <span className="flex items-center justify-center rounded-md p-1.5 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
+              {theme === 'dark' ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            </span>
           </button>
           <button
             onClick={() => setMenuOpen(!menuOpen)}

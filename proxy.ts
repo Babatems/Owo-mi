@@ -17,6 +17,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL('/en', request.url))
   }
 
+  // Invitation acceptance: public, no auth required
+  if (pathname.startsWith('/accept-invitation')) {
+    return NextResponse.next()
+  }
+
   // Protect /dashboard and all sub-paths
   if (pathname === DASHBOARD_PREFIX || pathname.startsWith(DASHBOARD_PREFIX + '/')) {
     const session = await auth.api.getSession({ headers: await headers() })

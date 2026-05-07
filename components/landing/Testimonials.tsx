@@ -61,7 +61,7 @@ function ShortCard({ quote }: { quote: ShortQuote }) {
       </blockquote>
       <footer className="mt-3">
         <p className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{quote.name}</p>
-        <p className="text-xs text-neutral-400">{quote.location}</p>
+        <p className="text-xs text-neutral-400 dark:text-neutral-300">{quote.location}</p>
       </footer>
     </article>
   )

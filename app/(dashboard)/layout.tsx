@@ -26,8 +26,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       suppressHydrationWarning
       className={`${jakartaSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
-      <body className="h-full bg-[#FAFAFA] text-neutral-900">
-        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+      <body className="h-full bg-[#FAFAFA] text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Providers>
             <div className="flex h-full">
               <div className="hidden md:flex">
@@ -35,7 +35,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </div>
               <div className="flex flex-1 flex-col overflow-hidden">
                 <Header />
-                <main className="flex-1 overflow-y-auto p-6">{children}</main>
+                <main className="flex-1 overflow-y-auto bg-[#FAFAFA] p-6 dark:bg-neutral-950">
+                  {children}
+                </main>
               </div>
             </div>
           </Providers>

@@ -61,7 +61,7 @@ export async function Hero() {
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Text column */}
-          <div className="order-2 text-center lg:order-1 lg:text-left">
+          <div className="order-1 text-center lg:text-left">
             <div
               className="mb-4 inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium"
               style={{
@@ -105,7 +105,7 @@ export async function Hero() {
           </div>
 
           {/* Visual column */}
-          <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div className="order-2 flex justify-center lg:justify-end">
             <Suspense fallback={<DashboardSkeleton />}>
               <HeroVisual />
             </Suspense>

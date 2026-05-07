@@ -10,6 +10,8 @@ import { DEFAULT_CATEGORIES } from '@/lib/data/default-categories'
 import { getSession, writeAuditLog } from './utils'
 import { createFamilySchema, inviteMemberSchema } from '@/lib/validations/schemas'
 import type { ActionResult } from './utils'
+import { resend, EMAIL_FROM } from '@/lib/email'
+import { invitationEmailHtml } from '@/lib/email/templates'
 
 export async function createFamily(input: unknown): Promise<ActionResult<{ id: string }>> {
   const session = await getSession()
@@ -103,13 +105,34 @@ export async function inviteMember(familyId: string, input: unknown): Promise<Ac
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid input' }
   }
 
-  await auth.api.createInvitation({
+  if (session.user.email.toLowerCase() === parsed.data.email.toLowerCase()) {
+    return { success: false, error: 'You cannot invite yourself.' }
+  }
+
+  const invitation = await auth.api.createInvitation({
     headers: await headers(),
     body: {
       organizationId: familyId,
       email: parsed.data.email,
       role: parsed.data.role,
     },
+  })
+
+  const family = await auth.api.getFullOrganization({
+    headers: await headers(),
+    query: { organizationId: familyId },
+  })
+
+  const acceptUrl = `${process.env.NEXT_PUBLIC_APP_URL}/accept-invitation/${invitation.id}`
+  await resend.emails.send({
+    from: EMAIL_FROM,
+    to: parsed.data.email,
+    subject: `${session.user.name} invited you to join their family on Owó-mi`,
+    html: invitationEmailHtml({
+      inviterName: session.user.name,
+      orgName: family?.name ?? 'their family',
+      url: acceptUrl,
+    }),
   })
 
   await writeAuditLog({
@@ -120,6 +143,14 @@ export async function inviteMember(familyId: string, input: unknown): Promise<Ac
     newValue: { email: parsed.data.email, role: parsed.data.role },
   })
 
+  return { success: true, data: undefined }
+}
+
+export async function acceptInvitation(invitationId: string): Promise<ActionResult<void>> {
+  await auth.api.acceptInvitation({
+    headers: await headers(),
+    body: { invitationId },
+  })
   return { success: true, data: undefined }
 }
 

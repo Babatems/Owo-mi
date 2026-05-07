@@ -1,6 +1,5 @@
 import { Plus_Jakarta_Sans, IBM_Plex_Mono } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import { Providers } from '@/components/providers'
 import '@/app/globals.css'
 
 const jakartaSans = Plus_Jakarta_Sans({
@@ -17,7 +16,7 @@ const ibmPlexMono = IBM_Plex_Mono({
   display: 'swap',
 })
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default function AcceptInvitationLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
@@ -26,15 +25,14 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     >
       <body className="h-full bg-[#FAFAFA] text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <Providers>
-            <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
-              <div className="mb-8 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Owó-mi</h1>
-                <p className="mt-1 text-sm text-neutral-500">Your Canadian budget tracker</p>
-              </div>
-              <div className="w-full max-w-sm">{children}</div>
+          <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
+            <div className="mb-8 text-center">
+              <p className="text-base font-semibold tracking-tight text-neutral-900 dark:text-white">
+                <span style={{ color: 'var(--brand)' }}>✦</span> Owó-mi
+              </p>
             </div>
-          </Providers>
+            <div className="w-full max-w-sm">{children}</div>
+          </div>
         </ThemeProvider>
       </body>
     </html>
