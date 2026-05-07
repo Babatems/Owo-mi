@@ -44,7 +44,8 @@ export default function SignInPage() {
         password: values.password,
       })
       if (authError) throw new Error(authError.message)
-      router.push('/accounts')
+      const params = new URLSearchParams(window.location.search)
+      router.push(params.get('next') ?? '/')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed')
     } finally {
