@@ -184,3 +184,48 @@
     transform: translateY(0);
   }
 }
+
+/* Dark/light mode circle-sweep via View Transition API */
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  /* Sweeping INTO dark mode — new (dark) layer expands from click point */
+  .dark::view-transition-new(root) {
+    z-index: 999;
+    animation: theme-sweep 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  .dark::view-transition-old(root) {
+    z-index: 1;
+  }
+
+  /* Sweeping BACK to light mode — old (dark) layer contracts */
+  ::view-transition-old(root) {
+    z-index: 999;
+    animation: theme-sweep-out 0.45s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  ::view-transition-new(root) {
+    z-index: 1;
+  }
+}
+
+@keyframes theme-sweep {
+  from {
+    clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}
+
+@keyframes theme-sweep-out {
+  from {
+    clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+  to {
+    clip-path: circle(0px at var(--vt-x, 50%) var(--vt-y, 50%));
+  }
+}

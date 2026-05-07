@@ -15,6 +15,20 @@ export function LandingNav() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
+  function handleThemeToggle(e: React.MouseEvent<HTMLButtonElement>) {
+    const rect = e.currentTarget.getBoundingClientRect()
+    document.documentElement.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`)
+    document.documentElement.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`)
+    const next = theme === 'dark' ? 'light' : 'dark'
+    if (!document.startViewTransition) {
+      setTheme(next)
+      return
+    }
+    document.startViewTransition(() => {
+      setTheme(next)
+    })
+  }
+
   const isEn = pathname.startsWith('/en')
   const altLocale = isEn ? 'fr' : 'en'
   const altPath = pathname.replace(/^\/(en|fr)/, `/${altLocale}`)
@@ -44,7 +58,7 @@ export function LandingNav() {
           className="flex items-center gap-1.5 text-base font-semibold tracking-tight text-neutral-900 dark:text-white"
         >
           <span className="text-[var(--brand)]">✦</span>
-          <span>Owo-mi</span>
+          <span>Owó-mi</span>
         </Link>
 
         {/* Desktop actions */}
@@ -59,7 +73,7 @@ export function LandingNav() {
 
           {/* Theme toggle */}
           <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={handleThemeToggle}
             className="flex size-9 items-center justify-center rounded-md text-neutral-500 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:text-neutral-400 dark:hover:bg-neutral-800 dark:hover:text-white"
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             suppressHydrationWarning
@@ -86,7 +100,7 @@ export function LandingNav() {
         {/* Mobile: theme + hamburger */}
         <div className="flex items-center gap-1 md:hidden">
           <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            onClick={handleThemeToggle}
             className="flex size-9 items-center justify-center rounded-md text-neutral-500 dark:text-neutral-400"
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             suppressHydrationWarning

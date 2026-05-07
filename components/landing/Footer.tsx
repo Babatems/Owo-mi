@@ -20,7 +20,7 @@ export async function LandingFooter() {
             <div className="mb-3 flex items-center gap-1.5">
               <span className="text-base font-semibold tracking-tight text-[var(--brand)]">✦</span>
               <span className="text-base font-semibold tracking-tight text-neutral-900 dark:text-white">
-                Owo-mi
+                Owó-mi
               </span>
             </div>
             <p className="text-sm leading-relaxed text-neutral-500 dark:text-neutral-400">
@@ -35,7 +35,7 @@ export async function LandingFooter() {
               {t('product')}
             </h3>
             <ul className="space-y-2">
-              {(['dashboard', 'pricing', 'security'] as const).map((key) => (
+              {(['dashboard', 'security'] as const).map((key) => (
                 <li key={key}>
                   <Link
                     href={key === 'dashboard' ? '/dashboard' : `/${locale}#${key}`}

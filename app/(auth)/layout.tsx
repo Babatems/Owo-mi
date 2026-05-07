@@ -29,7 +29,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
           <Providers>
             <div className="flex min-h-full flex-col items-center justify-center px-4 py-12">
               <div className="mb-8 text-center">
-                <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Owo-mi</h1>
+                <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">Owó-mi</h1>
                 <p className="mt-1 text-sm text-neutral-500">Your Canadian budget tracker</p>
               </div>
               <div className="w-full max-w-sm">{children}</div>

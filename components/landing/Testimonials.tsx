@@ -99,15 +99,25 @@ export async function Testimonials() {
 
         {/* 3 long testimonials */}
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {longItems.map((item) => (
-            <LongCard key={item.name} testimonial={item} />
+          {longItems.map((item, i) => (
+            <div
+              key={item.name}
+              className="reveal-on-scroll"
+              style={{ animationDelay: `${i * 80}ms` }}
+            >
+              <LongCard testimonial={item} />
+            </div>
           ))}
         </div>
 
         {/* Short quote masonry */}
         <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
-          {shortItems.map((q) => (
-            <div key={q.name} className="mb-4 break-inside-avoid">
+          {shortItems.map((q, i) => (
+            <div
+              key={q.name}
+              className="reveal-on-scroll mb-4 break-inside-avoid"
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
               <ShortCard quote={q} />
             </div>
           ))}

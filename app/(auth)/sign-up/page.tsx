@@ -40,7 +40,7 @@ export default function SignUpPage() {
       const result = await createFamily({ name: `${values.name}'s Family` })
       if (!result.success) throw new Error(result.error)
 
-      router.push('/')
+      router.push('/dashboard')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {

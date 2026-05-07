@@ -1,6 +1,6 @@
 {
   "nav": {
-    "logo": "Owo-mi",
+    "logo": "Owó-mi",
     "signIn": "Sign in",
     "startFree": "Start free",
     "switchLocale": "Français",
@@ -8,7 +8,7 @@
   },
   "hero": {
     "headline": "Finally know where your money goes.",
-    "subheadline": "Owo-mi connects every Canadian account — chequing, TFSA, RRSP, FHSA, credit cards — and shows you what's really going on. Built in Canada. Read-only. Bank-grade security.",
+    "subheadline": "Owó-mi connects every Canadian account — chequing, TFSA, RRSP, FHSA, credit cards — and shows you what's really going on. Built in Canada. Read-only. Bank-grade security.",
     "ctaPrimary": "Start tracking — it's free",
     "ctaSecondary": "See how it works",
     "trustLine": "No credit card · Read-only · Built in Canada"
@@ -26,7 +26,7 @@
     "subheadline": "Calm, clear, and built for how Canadians actually manage money.",
     "block1": {
       "headline": "Track every dollar, automatically.",
-      "body": "Connect all your Canadian accounts in minutes. Owo-mi categorizes every transaction and shows you exactly where your money is going."
+      "body": "Connect all your Canadian accounts in minutes. Owó-mi categorizes every transaction and shows you exactly where your money is going."
     },
     "block2": {
       "headline": "Hit your Canadian savings goals.",
@@ -34,7 +34,7 @@
     },
     "block3": {
       "headline": "Budget without the stress.",
-      "body": "Set monthly budgets for any category. Owo-mi flags overspend before it happens, so there are no more end-of-month surprises."
+      "body": "Set monthly budgets for any category. Owó-mi flags overspend before it happens, so there are no more end-of-month surprises."
     },
     "bento": {
       "spending": "Spending",
@@ -55,25 +55,25 @@
   "testimonials": {
     "sectionLabel": "Real Canadians",
     "headline": "Used by Canadians from coast to coast.",
-    "subheadline": "From Halifax to Victoria, Owo-mi helps real people see their money clearly.",
+    "subheadline": "From Halifax to Victoria, Owó-mi helps real people see their money clearly.",
     "items": [
       {
         "name": "Aanya R.",
         "location": "Toronto, ON",
         "since": "2025",
-        "quote": "I had no idea I was spending $380 a month on subscriptions. After two weeks with Owo-mi, I'd cancelled six and put the savings straight into my TFSA. Best $8 a month I spend."
+        "quote": "I had no idea I was spending $380 a month on subscriptions. After two weeks with Owó-mi, I'd cancelled six and put the savings straight into my TFSA. Best $8 a month I spend."
       },
       {
         "name": "Marc-André B.",
         "location": "Quebec City, QC",
         "since": "2025",
-        "quote": "My partner and I used to argue about money constantly. With Owo-mi we can both see exactly what's going in and out — no more surprises at the end of the month."
+        "quote": "My partner and I used to argue about money constantly. With Owó-mi we can both see exactly what's going in and out — no more surprises at the end of the month."
       },
       {
         "name": "Jordan K.",
         "location": "Calgary, AB",
         "since": "2025",
-        "quote": "I never knew what my RRSP contribution room actually was. Owo-mi put it front and centre. I've put away $14,000 more than I would have otherwise."
+        "quote": "I never knew what my RRSP contribution room actually was. Owó-mi put it front and centre. I've put away $14,000 more than I would have otherwise."
       }
     ],
     "shortQuotes": [
@@ -120,62 +120,7 @@
       {
         "name": "Rajan P.",
         "location": "Brampton",
-        "quote": "Data hosted in Canada matters to me. Owo-mi gets it."
-      }
-    ]
-  },
-  "pricing": {
-    "sectionLabel": "Pricing",
-    "headline": "Simple, transparent pricing.",
-    "subheadline": "No drip-pricing. No hidden fees. All amounts in Canadian dollars.",
-    "monthly": "Monthly",
-    "annual": "Annual",
-    "saveMonths": "Save 2 months",
-    "mostPopular": "Most Popular",
-    "perMonth": "/mo",
-    "perYear": "/yr",
-    "ctaFree": "Get started free",
-    "ctaPaid": "Start 30-day free trial",
-    "microcopy": "30 days free · No credit card · Cancel anytime",
-    "tiers": [
-      {
-        "name": "Free",
-        "monthlyPrice": 0,
-        "annualPrice": 0,
-        "description": "Get started and see where your money goes.",
-        "features": [
-          "2 connected accounts",
-          "30-day transaction history",
-          "Basic categories",
-          "Spending overview"
-        ]
-      },
-      {
-        "name": "Plus",
-        "monthlyPrice": 799,
-        "annualPrice": 7900,
-        "description": "Unlimited tracking for serious budgeters.",
-        "features": [
-          "Unlimited accounts",
-          "Full transaction history",
-          "Savings goals (TFSA, RRSP, FHSA)",
-          "Budget alerts",
-          "Subscription tracker",
-          "Couples / family sharing"
-        ]
-      },
-      {
-        "name": "Pro",
-        "monthlyPrice": 1499,
-        "annualPrice": 14900,
-        "description": "For those who want the full picture.",
-        "features": [
-          "Everything in Plus",
-          "Investment tracking",
-          "Net worth dashboard",
-          "Advisor data export",
-          "Priority support"
-        ]
+        "quote": "Data hosted in Canada matters to me. Owó-mi gets it."
       }
     ]
   },
@@ -188,20 +133,20 @@
         "a": "Yes. All data is encrypted with AES-256 at rest and TLS 1.3 in transit. Your data is hosted exclusively in Canada (Montréal region). We hold SOC 2 Type II certification, and our security practices are audited annually."
       },
       {
-        "q": "Can Owo-mi move my money?",
-        "a": "Never. Owo-mi is read-only. We connect to your accounts to read transaction data — we cannot initiate transfers, payments, or any movement of funds. Full stop."
+        "q": "Can Owó-mi move my money?",
+        "a": "Never. Owó-mi is read-only. We connect to your accounts to read transaction data — we cannot initiate transfers, payments, or any movement of funds. Full stop."
       },
       {
         "q": "My bank app already shows me my balance. Why do I need this?",
-        "a": "Your bank shows you one account at a time. Owo-mi gives you a single view across all your accounts — chequing, savings, TFSA, RRSP, FHSA, credit cards — so you can see the full picture and actually make decisions."
+        "a": "Your bank shows you one account at a time. Owó-mi gives you a single view across all your accounts — chequing, savings, TFSA, RRSP, FHSA, credit cards — so you can see the full picture and actually make decisions."
       },
       {
         "q": "I track everything in a spreadsheet. Why would I switch?",
-        "a": "Spreadsheets require manual entry, break down when life gets busy, and can't tell you your RRSP contribution room. Owo-mi does all the data entry automatically and surfaces insights your spreadsheet never could."
+        "a": "Spreadsheets require manual entry, break down when life gets busy, and can't tell you your RRSP contribution room. Owó-mi does all the data entry automatically and surfaces insights your spreadsheet never could."
       },
       {
         "q": "What Canadian banks and institutions do you support?",
-        "a": "Owo-mi supports 250+ Canadian banks, credit unions, and financial institutions — including all Big 6 banks, Desjardins, Tangerine, EQ Bank, and most regional credit unions."
+        "a": "Owó-mi supports 250+ Canadian banks, credit unions, and financial institutions — including all Big 6 banks, Desjardins, Tangerine, EQ Bank, and most regional credit unions."
       },
       {
         "q": "Where is my data stored? Who can see it?",
@@ -212,14 +157,14 @@
         "a": "You keep access to the Free tier. All your data is retained. You can export everything at any time in CSV format. We don't hold your data hostage."
       },
       {
-        "q": "Is Owo-mi available in French?",
-        "a": "Absolument. Owo-mi is fully bilingual — English and Canadian French (Québécois). Switch languages anytime from the navigation bar. Our French interface uses proper Quebec financial terminology: CELI, REER, CELIAPP."
+        "q": "Is Owó-mi available in French?",
+        "a": "Absolument. Owó-mi is fully bilingual — English and Canadian French (Québécois). Switch languages anytime from the navigation bar. Our French interface uses proper Quebec financial terminology: CELI, REER, CELIAPP."
       }
     ]
   },
   "finalCta": {
     "headline": "Your money, made simple.",
-    "subheadline": "Try Owo-mi free for 30 days. No card. Cancel any time.",
+    "subheadline": "Try Owó-mi free for 30 days. No card. Cancel any time.",
     "cta": "Start tracking — it's free"
   },
   "footer": {
@@ -241,7 +186,7 @@
     },
     "compliance": "PIPEDA & Quebec Law 25 compliant. Data hosted in Canada (Montréal). Privacy Officer: privacy@owo-mi.ca",
     "builtIn": "Built in Canada",
-    "copyright": "© 2026 Owo-mi. \"Owo-mi\" (oh-WOH MEE) means \"my money\" in Yoruba.",
+    "copyright": "© 2026 Owó-mi. \"Owó-mi\" (oh-WOH MEE) means \"my money\" in Yoruba.",
     "switchLocale": "English"
   }
 }

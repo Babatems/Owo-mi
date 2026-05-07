@@ -29,7 +29,7 @@ export function Header() {
 
   async function handleSignOut() {
     await authClient.signOut()
-    router.push('/sign-in')
+    router.push('/en')
   }
 
   return (

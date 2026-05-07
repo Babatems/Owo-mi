@@ -1,6 +1,6 @@
 {
   "nav": {
-    "logo": "Owo-mi",
+    "logo": "Owó-mi",
     "signIn": "Se connecter",
     "startFree": "Commencer gratuitement",
     "switchLocale": "English",
@@ -8,7 +8,7 @@
   },
   "hero": {
     "headline": "Votre argent. En entier. Enfin clair.",
-    "subheadline": "Owo-mi relie tous vos comptes canadiens — chèques, épargne, CELI, REER, CELIAPP, cartes de crédit — pour vous montrer ce qui se passe vraiment. Conçu au Canada. Lecture seule. Sécurité bancaire.",
+    "subheadline": "Owó-mi relie tous vos comptes canadiens — chèques, épargne, CELI, REER, CELIAPP, cartes de crédit — pour vous montrer ce qui se passe vraiment. Conçu au Canada. Lecture seule. Sécurité bancaire.",
     "ctaPrimary": "Commencer — gratuit",
     "ctaSecondary": "Voir comment ça fonctionne",
     "trustLine": "Sans carte de crédit · Lecture seule · Conçu au Canada"
@@ -26,7 +26,7 @@
     "subheadline": "Calme, clair et conçu pour la façon dont les Canadiens gèrent vraiment leur argent.",
     "block1": {
       "headline": "Suivez chaque dollar, automatiquement.",
-      "body": "Reliez tous vos comptes canadiens en quelques minutes. Owo-mi catégorise chaque transaction et vous montre exactement où va votre argent."
+      "body": "Reliez tous vos comptes canadiens en quelques minutes. Owó-mi catégorise chaque transaction et vous montre exactement où va votre argent."
     },
     "block2": {
       "headline": "Atteignez vos objectifs d'épargne canadiens.",
@@ -34,7 +34,7 @@
     },
     "block3": {
       "headline": "Budgétez sans stress.",
-      "body": "Établissez des budgets mensuels par catégorie. Owo-mi vous signale les dépassements avant qu'ils surviennent — fini les mauvaises surprises en fin de mois."
+      "body": "Établissez des budgets mensuels par catégorie. Owó-mi vous signale les dépassements avant qu'ils surviennent — fini les mauvaises surprises en fin de mois."
     },
     "bento": {
       "spending": "Dépenses",
@@ -55,25 +55,25 @@
   "testimonials": {
     "sectionLabel": "Vrais Canadiens",
     "headline": "Utilisé par des Canadiens d'un océan à l'autre.",
-    "subheadline": "De Halifax à Victoria, Owo-mi aide de vraies personnes à voir leur argent clairement.",
+    "subheadline": "De Halifax à Victoria, Owó-mi aide de vraies personnes à voir leur argent clairement.",
     "items": [
       {
         "name": "Aanya R.",
         "location": "Toronto, ON",
         "since": "2025",
-        "quote": "Je ne savais pas que je dépensais 380 $ par mois en abonnements. Après deux semaines avec Owo-mi, j'en avais annulé six et mis l'épargne directement dans mon CELI. Le meilleur 8 $ par mois que je dépense."
+        "quote": "Je ne savais pas que je dépensais 380 $ par mois en abonnements. Après deux semaines avec Owó-mi, j'en avais annulé six et mis l'épargne directement dans mon CELI. Le meilleur 8 $ par mois que je dépense."
       },
       {
         "name": "Marc-André B.",
         "location": "Québec, QC",
         "since": "2025",
-        "quote": "Mon partenaire et moi nous disputions constamment à propos de l'argent. Avec Owo-mi, nous pouvons tous les deux voir exactement ce qui entre et sort — plus de mauvaises surprises en fin de mois."
+        "quote": "Mon partenaire et moi nous disputions constamment à propos de l'argent. Avec Owó-mi, nous pouvons tous les deux voir exactement ce qui entre et sort — plus de mauvaises surprises en fin de mois."
       },
       {
         "name": "Jordan K.",
         "location": "Calgary, AB",
         "since": "2025",
-        "quote": "Je ne savais jamais quels étaient mes droits de cotisation REER. Owo-mi les a mis bien en évidence. J'ai mis de côté 14 000 $ de plus que je ne l'aurais fait autrement."
+        "quote": "Je ne savais jamais quels étaient mes droits de cotisation REER. Owó-mi les a mis bien en évidence. J'ai mis de côté 14 000 $ de plus que je ne l'aurais fait autrement."
       }
     ],
     "shortQuotes": [
@@ -120,62 +120,7 @@
       {
         "name": "Rajan P.",
         "location": "Brampton",
-        "quote": "Les données hébergées au Canada, c'est important pour moi. Owo-mi comprend ça."
-      }
-    ]
-  },
-  "pricing": {
-    "sectionLabel": "Tarification",
-    "headline": "Des prix simples et transparents.",
-    "subheadline": "Pas de tarification progressive. Pas de frais cachés. Tous les montants en dollars canadiens.",
-    "monthly": "Mensuel",
-    "annual": "Annuel",
-    "saveMonths": "Économisez 2 mois",
-    "mostPopular": "Le plus populaire",
-    "perMonth": "/mois",
-    "perYear": "/an",
-    "ctaFree": "Commencer gratuitement",
-    "ctaPaid": "Essai gratuit de 30 jours",
-    "microcopy": "30 jours gratuits · Sans carte de crédit · Annulez à tout moment",
-    "tiers": [
-      {
-        "name": "Gratuit",
-        "monthlyPrice": 0,
-        "annualPrice": 0,
-        "description": "Commencez à voir où va votre argent.",
-        "features": [
-          "2 comptes reliés",
-          "Historique des 30 derniers jours",
-          "Catégories de base",
-          "Aperçu des dépenses"
-        ]
-      },
-      {
-        "name": "Plus",
-        "monthlyPrice": 799,
-        "annualPrice": 7900,
-        "description": "Suivi illimité pour les budgétistes sérieux.",
-        "features": [
-          "Comptes illimités",
-          "Historique complet des transactions",
-          "Objectifs d'épargne (CELI, REER, CELIAPP)",
-          "Alertes budgétaires",
-          "Détecteur d'abonnements",
-          "Partage en couple / famille"
-        ]
-      },
-      {
-        "name": "Pro",
-        "monthlyPrice": 1499,
-        "annualPrice": 14900,
-        "description": "Pour ceux qui veulent une image complète.",
-        "features": [
-          "Tout ce qui est inclus dans Plus",
-          "Suivi des placements",
-          "Tableau de bord de la valeur nette",
-          "Exportation des données pour conseiller",
-          "Assistance prioritaire"
-        ]
+        "quote": "Les données hébergées au Canada, c'est important pour moi. Owó-mi comprend ça."
       }
     ]
   },
@@ -188,20 +133,20 @@
         "a": "Oui. Toutes les données sont chiffrées avec AES-256 au repos et TLS 1.3 en transit. Vos données sont hébergées exclusivement au Canada (région Montréal). Nous détenons la certification SOC 2 Type II et nos pratiques de sécurité font l'objet d'audits annuels."
       },
       {
-        "q": "Owo-mi peut-il déplacer mon argent ?",
-        "a": "Jamais. Owo-mi est en lecture seule. Nous nous connectons à vos comptes pour lire les données de transaction — nous ne pouvons pas initier de virements, de paiements ou tout autre mouvement de fonds. Point final."
+        "q": "Owó-mi peut-il déplacer mon argent ?",
+        "a": "Jamais. Owó-mi est en lecture seule. Nous nous connectons à vos comptes pour lire les données de transaction — nous ne pouvons pas initier de virements, de paiements ou tout autre mouvement de fonds. Point final."
       },
       {
         "q": "Mon application bancaire me montre déjà mon solde. Pourquoi en aurais-je besoin ?",
-        "a": "Votre banque vous montre un compte à la fois. Owo-mi vous donne une vue unique sur tous vos comptes — chèques, épargne, CELI, REER, CELIAPP, cartes de crédit — pour que vous puissiez voir la situation globale et prendre de vraies décisions."
+        "a": "Votre banque vous montre un compte à la fois. Owó-mi vous donne une vue unique sur tous vos comptes — chèques, épargne, CELI, REER, CELIAPP, cartes de crédit — pour que vous puissiez voir la situation globale et prendre de vraies décisions."
       },
       {
         "q": "Je suis tout dans un tableur. Pourquoi changer ?",
-        "a": "Les tableurs nécessitent une saisie manuelle, tombent en panne quand la vie devient chargée et ne peuvent pas vous dire vos droits de cotisation REER. Owo-mi fait toute la saisie automatiquement et révèle des informations que votre tableur ne pourrait jamais fournir."
+        "a": "Les tableurs nécessitent une saisie manuelle, tombent en panne quand la vie devient chargée et ne peuvent pas vous dire vos droits de cotisation REER. Owó-mi fait toute la saisie automatiquement et révèle des informations que votre tableur ne pourrait jamais fournir."
       },
       {
         "q": "Quelles banques et institutions canadiennes prenez-vous en charge ?",
-        "a": "Owo-mi prend en charge plus de 250 banques canadiennes, caisses populaires et institutions financières — dont les six grandes banques, Desjardins, Tangerine, Banque EQ et la plupart des caisses régionales."
+        "a": "Owó-mi prend en charge plus de 250 banques canadiennes, caisses populaires et institutions financières — dont les six grandes banques, Desjardins, Tangerine, Banque EQ et la plupart des caisses régionales."
       },
       {
         "q": "Où sont stockées mes données ? Qui peut les voir ?",
@@ -212,14 +157,14 @@
         "a": "Vous conservez l'accès au niveau Gratuit. Toutes vos données sont conservées. Vous pouvez tout exporter à tout moment au format CSV. Nous ne retenons pas vos données en otage."
       },
       {
-        "q": "Owo-mi est-il disponible en français ?",
-        "a": "Absolument. Owo-mi est entièrement bilingue — anglais et français canadien (québécois). Changez de langue à tout moment depuis la barre de navigation. Notre interface française utilise la terminologie financière québécoise : CELI, REER, CELIAPP."
+        "q": "Owó-mi est-il disponible en français ?",
+        "a": "Absolument. Owó-mi est entièrement bilingue — anglais et français canadien (québécois). Changez de langue à tout moment depuis la barre de navigation. Notre interface française utilise la terminologie financière québécoise : CELI, REER, CELIAPP."
       }
     ]
   },
   "finalCta": {
     "headline": "Votre argent, simplifié.",
-    "subheadline": "Essayez Owo-mi gratuitement pendant 30 jours. Sans carte. Annulez à tout moment.",
+    "subheadline": "Essayez Owó-mi gratuitement pendant 30 jours. Sans carte. Annulez à tout moment.",
     "cta": "Commencer — gratuit"
   },
   "footer": {
@@ -241,7 +186,7 @@
     },
     "compliance": "Conforme à la LPRPDE et à la Loi 25 du Québec. Données hébergées au Canada (Montréal). Responsable de la protection des renseignements personnels : confidentialite@owo-mi.ca",
     "builtIn": "Conçu au Canada",
-    "copyright": "© 2026 Owo-mi. « Owo-mi » (oh-WOH MEE) signifie « mon argent » en yoruba.",
+    "copyright": "© 2026 Owó-mi. « Owó-mi » (oh-WOH MEE) signifie « mon argent » en yoruba.",
     "switchLocale": "Français"
   }
 }

@@ -149,7 +149,7 @@ type FeatureBlockProps = {
 function FeatureBlock({ label, headline, body, visual, reversed }: FeatureBlockProps) {
   return (
     <div
-      className={`grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16 ${reversed ? 'lg:direction-rtl' : ''}`}
+      className={`reveal-on-scroll grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16 ${reversed ? 'lg:direction-rtl' : ''}`}
     >
       <div className={reversed ? 'lg:order-2' : 'lg:order-1'}>
         <p

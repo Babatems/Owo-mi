@@ -78,7 +78,7 @@ export function FAQ() {
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-neutral-200/70 bg-white px-6 dark:border-neutral-700/60 dark:bg-neutral-900">
+          <div className="reveal-on-scroll rounded-2xl border border-neutral-200/70 bg-white px-6 dark:border-neutral-700/60 dark:bg-neutral-900">
             {items.map((item, i) => (
               <FAQAccordionItem key={i} item={item} index={i} />
             ))}

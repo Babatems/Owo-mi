@@ -12,11 +12,9 @@ const AUTH_PATHS = ['/sign-in', '/sign-up', '/verify', '/mfa']
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Root: redirect to locale
+  // Root: always redirect to English (French is opt-in via toggle)
   if (pathname === '/') {
-    const acceptLang = request.headers.get('accept-language') ?? ''
-    const locale = acceptLang.toLowerCase().includes('fr') ? 'fr' : 'en'
-    return NextResponse.redirect(new URL(`/${locale}`, request.url))
+    return NextResponse.redirect(new URL('/en', request.url))
   }
 
   // Protect /dashboard and all sub-paths

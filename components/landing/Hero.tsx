@@ -114,7 +114,7 @@ export async function Hero() {
       </div>
 
       {/* Sticky mobile CTA */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200/60 bg-[var(--marketing-bg)]/95 p-4 backdrop-blur-sm md:hidden dark:border-neutral-800/60 dark:bg-[var(--marketing-bg-dark)]/95">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-neutral-200/60 bg-[var(--marketing-bg)]/95 px-4 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur-sm md:hidden dark:border-neutral-800/60 dark:bg-[var(--marketing-bg-dark)]/95">
         <Link
           href="/sign-up"
           className="block w-full rounded-xl py-3.5 text-center text-base font-semibold text-white"

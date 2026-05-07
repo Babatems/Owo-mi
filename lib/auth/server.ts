@@ -1,6 +1,6 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { magicLink, twoFactor, organization } from 'better-auth/plugins'
+import { twoFactor, organization } from 'better-auth/plugins'
 import { db } from '@/lib/db'
 import * as authSchema from '@/lib/db/auth-schema'
 
@@ -14,12 +14,6 @@ export const auth = betterAuth({
     twoFactor({
       issuer: 'Owo-mi',
       totpOptions: { period: 30, digits: 6 },
-    }),
-    magicLink({
-      sendMagicLink: async ({ email, url }) => {
-        // TODO: integrate Resend email provider
-        console.log(`Magic link for ${email}: ${url}`)
-      },
     }),
     organization({ allowUserToCreateOrganization: true }),
   ],

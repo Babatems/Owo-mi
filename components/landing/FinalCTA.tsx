@@ -8,7 +8,7 @@ export async function FinalCTA() {
     <section className="py-20 sm:py-28" aria-labelledby="final-cta-heading">
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
         <div
-          className="overflow-hidden rounded-3xl p-12 sm:p-16"
+          className="reveal-on-scroll overflow-hidden rounded-3xl p-12 sm:p-16"
           style={{ backgroundColor: 'var(--brand)' }}
         >
           <p className="mb-4 text-sm font-semibold tracking-wider text-emerald-200 uppercase">

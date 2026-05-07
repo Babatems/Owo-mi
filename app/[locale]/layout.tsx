@@ -33,11 +33,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     metadataBase: new URL('https://owo-mi-five.vercel.app'),
     title: isFr
-      ? 'Owo-mi — Votre argent. En entier. Enfin clair.'
-      : 'Owo-mi — Finally know where your money goes.',
+      ? 'Owó-mi — Votre argent. En entier. Enfin clair.'
+      : 'Owó-mi — Finally know where your money goes.',
     description: isFr
-      ? 'Owo-mi relie tous vos comptes canadiens pour vous montrer ce qui se passe vraiment. Conçu au Canada. LPRPDE et Loi 25 conforme.'
-      : "Owo-mi connects every Canadian account and shows you what's really going on. Built in Canada. PIPEDA & Law 25 compliant.",
+      ? 'Owó-mi relie tous vos comptes canadiens pour vous montrer ce qui se passe vraiment. Conçu au Canada. LPRPDE et Loi 25 conforme.'
+      : "Owó-mi connects every Canadian account and shows you what's really going on. Built in Canada. PIPEDA & Law 25 compliant.",
     alternates: {
       canonical: `/${locale}`,
       languages: {
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       locale: isFr ? 'fr_CA' : 'en_CA',
       type: 'website',
-      siteName: 'Owo-mi',
+      siteName: 'Owó-mi',
     },
   }
 }
@@ -65,12 +65,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={`${jakartaSans.variable} ${ibmPlexMono.variable} antialiased`}
     >
       <body className="marketing-bg text-neutral-900 dark:text-neutral-100">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextIntlClientProvider messages={messages}>
             <a
               href="#main"
@@ -79,7 +74,9 @@ export default async function LocaleLayout({ children, params }: Props) {
               {locale === 'fr' ? 'Aller au contenu' : 'Skip to content'}
             </a>
             <LandingNav />
-            <main id="main">{children}</main>
+            <main id="main" className="pb-20 md:pb-0">
+              {children}
+            </main>
             <LandingFooter />
           </NextIntlClientProvider>
         </ThemeProvider>
