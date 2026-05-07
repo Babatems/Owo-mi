@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth/server'
-import { headers } from 'next/headers'
 import createNextIntlMiddleware from 'next-intl/middleware'
 import { routing } from '@/i18n/routing'
 
@@ -24,7 +23,7 @@ export async function proxy(request: NextRequest) {
 
   // Protect /dashboard and all sub-paths
   if (pathname === DASHBOARD_PREFIX || pathname.startsWith(DASHBOARD_PREFIX + '/')) {
-    const session = await auth.api.getSession({ headers: await headers() })
+    const session = await auth.api.getSession({ headers: request.headers })
     if (!session?.user) {
       const signInUrl = new URL('/sign-in', request.url)
       signInUrl.searchParams.set('next', pathname)
@@ -35,7 +34,7 @@ export async function proxy(request: NextRequest) {
 
   // Auth pages: redirect authenticated users to dashboard
   if (AUTH_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
-    const session = await auth.api.getSession({ headers: await headers() })
+    const session = await auth.api.getSession({ headers: request.headers })
     if (session?.user) {
       return NextResponse.redirect(new URL(DASHBOARD_PREFIX, request.url))
     }
