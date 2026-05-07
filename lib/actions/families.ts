@@ -3,7 +3,9 @@
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db'
+import { eq } from 'drizzle-orm'
 import { categories } from '@/lib/db/schema'
+import { member as memberTable, organization as orgTable } from '@/lib/db/auth-schema'
 import { DEFAULT_CATEGORIES } from '@/lib/data/default-categories'
 import { getSession, writeAuditLog } from './utils'
 import { createFamilySchema, inviteMemberSchema } from '@/lib/validations/schemas'
@@ -45,13 +47,45 @@ export async function createFamily(input: unknown): Promise<ActionResult<{ id: s
 }
 
 export async function getFamilies() {
-  const orgs = await auth.api.listOrganizations({ headers: await headers() })
-  return orgs ?? []
+  try {
+    const session = await getSession()
+    return db
+      .select({
+        id: orgTable.id,
+        name: orgTable.name,
+        slug: orgTable.slug,
+        logo: orgTable.logo,
+        createdAt: orgTable.createdAt,
+        metadata: orgTable.metadata,
+      })
+      .from(memberTable)
+      .innerJoin(orgTable, eq(memberTable.organizationId, orgTable.id))
+      .where(eq(memberTable.userId, session.user.id))
+  } catch {
+    return []
+  }
 }
 
 export async function getActiveFamily() {
-  const orgs = await auth.api.listOrganizations({ headers: await headers() })
-  return orgs?.[0] ?? null
+  try {
+    const session = await getSession()
+    const rows = await db
+      .select({
+        id: orgTable.id,
+        name: orgTable.name,
+        slug: orgTable.slug,
+        logo: orgTable.logo,
+        createdAt: orgTable.createdAt,
+        metadata: orgTable.metadata,
+      })
+      .from(memberTable)
+      .innerJoin(orgTable, eq(memberTable.organizationId, orgTable.id))
+      .where(eq(memberTable.userId, session.user.id))
+      .limit(1)
+    return rows[0] ?? null
+  } catch {
+    return null
+  }
 }
 
 export async function getFamilyMembers(familyId: string) {

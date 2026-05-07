@@ -3,8 +3,9 @@
 import { headers } from 'next/headers'
 import { auth } from '@/lib/auth/server'
 import { db } from '@/lib/db'
-import { sql } from 'drizzle-orm'
+import { eq, sql } from 'drizzle-orm'
 import { auditLog } from '@/lib/db/schema'
+import { member as memberTable } from '@/lib/db/auth-schema'
 
 export type ActionResult<T> = { success: true; data: T } | { success: false; error: string }
 
@@ -15,10 +16,15 @@ export async function getSession() {
 }
 
 export async function getActiveFamilyId(): Promise<string> {
-  const orgs = await auth.api.listOrganizations({ headers: await headers() })
-  const org = orgs?.[0]
-  if (!org) throw new Error('NO_FAMILY')
-  return org.id
+  const session = await getSession()
+  const rows = await db
+    .select({ organizationId: memberTable.organizationId })
+    .from(memberTable)
+    .where(eq(memberTable.userId, session.user.id))
+    .limit(1)
+  const organizationId = rows[0]?.organizationId
+  if (!organizationId) throw new Error('NO_FAMILY')
+  return organizationId
 }
 
 export async function getActiveFamilyIdOrNull(): Promise<string | null> {
