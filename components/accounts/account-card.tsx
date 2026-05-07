@@ -77,16 +77,22 @@ export function AccountCard({ account }: { account: Account }) {
 
   return (
     <>
-      <Card className="group relative border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm">
+      <Card className="group relative border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm dark:border-neutral-800 dark:hover:border-neutral-700">
         <CardContent className="p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0 flex-1">
-              <p className="truncate font-semibold text-neutral-900">{account.name}</p>
+              <p className="truncate font-semibold text-neutral-900 dark:text-white">
+                {account.name}
+              </p>
               {account.institution && (
-                <p className="mt-0.5 truncate text-xs text-neutral-400">{account.institution}</p>
+                <p className="mt-0.5 truncate text-xs text-neutral-400 dark:text-neutral-300">
+                  {account.institution}
+                </p>
               )}
               {account.last4 && (
-                <p className="mt-0.5 text-xs text-neutral-400">····{account.last4}</p>
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-300">
+                  ····{account.last4}
+                </p>
               )}
             </div>
 
@@ -98,7 +104,7 @@ export function AccountCard({ account }: { account: Account }) {
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700"
+                  className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                   onClick={(e) => e.preventDefault()}
                 >
                   <MoreHorizontal className="size-4" />
@@ -109,7 +115,7 @@ export function AccountCard({ account }: { account: Account }) {
                     Edit
                   </DropdownMenuItem>
                   <DropdownMenuItem
-                    onClick={() => router.push(`/accounts/${account.slug ?? account.id}`)}
+                    onClick={() => router.push(`/dashboard/accounts/${account.slug ?? account.id}`)}
                   >
                     <ArrowRight className="mr-2 size-3.5" />
                     View transactions
@@ -128,14 +134,14 @@ export function AccountCard({ account }: { account: Account }) {
             </div>
           </div>
 
-          <Link href={`/accounts/${account.slug ?? account.id}`} className="mt-4 block">
+          <Link href={`/dashboard/accounts/${account.slug ?? account.id}`} className="mt-4 block">
             <Currency
               cents={account.balanceCents}
               currency={account.currency}
               className="text-2xl font-semibold"
               colorCode={account.type === 'credit'}
             />
-            <p className="mt-0.5 text-xs text-neutral-400">Current balance</p>
+            <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-300">Current balance</p>
           </Link>
 
           {REGISTERED_TYPES.has(account.type) && account.contributionRoomCents != null && (

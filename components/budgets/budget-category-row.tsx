@@ -68,21 +68,23 @@ export function BudgetCategoryRow({ budget, categories }: BudgetCategoryRowProps
   const clampedPercent = Math.min(budget.percentUsed, 100)
 
   return (
-    <div className="group flex flex-col gap-2 border-b border-neutral-100 py-3 first:pt-0 last:border-0">
+    <div className="group flex flex-col gap-2 border-b border-neutral-100 py-3 first:pt-0 last:border-0 dark:border-neutral-800">
       <div className="flex items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           {budget.categoryIcon && <span className="text-base">{budget.categoryIcon}</span>}
-          <span className="truncate text-sm font-medium text-neutral-900">
+          <span className="truncate text-sm font-medium text-neutral-900 dark:text-white">
             {budget.categoryName}
           </span>
-          {budget.carryoverEnabled && <RefreshCw className="size-3 shrink-0 text-neutral-400" />}
+          {budget.carryoverEnabled && (
+            <RefreshCw className="size-3 shrink-0 text-neutral-400 dark:text-neutral-500" />
+          )}
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
           {varianceBadge(budget.percentUsed, budget.remainingCents)}
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700">
+            <DropdownMenuTrigger className="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200">
               <MoreHorizontal className="size-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-36">
@@ -121,7 +123,7 @@ export function BudgetCategoryRow({ budget, categories }: BudgetCategoryRowProps
       </div>
 
       {/* Progress bar */}
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-700/50">
         <div
           className={cn('h-full rounded-full transition-all', varianceColor(budget.percentUsed))}
           style={{ width: `${clampedPercent}%` }}
@@ -129,16 +131,18 @@ export function BudgetCategoryRow({ budget, categories }: BudgetCategoryRowProps
       </div>
 
       {/* Planned / Actual / Remaining */}
-      <div className="flex justify-between text-xs text-neutral-500">
+      <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
         <span>
-          <span className="font-medium text-neutral-700 tabular-nums">
+          <span className="font-medium text-neutral-700 tabular-nums dark:text-neutral-200">
             <Currency cents={budget.actualCents} className="text-xs" />
           </span>{' '}
           spent
         </span>
         <span className="tabular-nums">
           of <Currency cents={budget.amountCents} className="text-xs" /> budgeted
-          <span className="ml-1 text-neutral-400">({Math.round(budget.percentUsed)}%)</span>
+          <span className="ml-1 text-neutral-400 dark:text-neutral-500">
+            ({Math.round(budget.percentUsed)}%)
+          </span>
         </span>
       </div>
     </div>

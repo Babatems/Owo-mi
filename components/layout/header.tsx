@@ -82,13 +82,13 @@ export function Header() {
           className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'rounded-full')}
         >
           <Avatar className="size-8">
-            <AvatarFallback className="bg-neutral-100 text-xs text-neutral-700">
+            <AvatarFallback className="bg-neutral-100 text-xs text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
               {initials ?? '?'}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48">
-          <div className="truncate px-2 py-1.5 text-xs text-neutral-500">
+          <div className="truncate px-2 py-1.5 text-xs text-neutral-500 dark:text-neutral-400">
             {session?.user?.email}
           </div>
           <DropdownMenuSeparator />

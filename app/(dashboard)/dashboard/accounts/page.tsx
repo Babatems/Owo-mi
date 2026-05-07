@@ -21,8 +21,8 @@ async function AccountsList() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900">Accounts</h1>
-          <p className="mt-0.5 text-sm text-neutral-500">
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Accounts</h1>
+          <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">
             {accounts.length} account{accounts.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -41,9 +41,11 @@ async function AccountsList() {
       </div>
 
       {accounts.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-neutral-300 p-12 text-center">
-          <p className="text-sm text-neutral-500">No accounts yet.</p>
-          <p className="mt-1 text-xs text-neutral-400">Add your first account to get started.</p>
+        <div className="rounded-lg border border-dashed border-neutral-300 p-12 text-center dark:border-neutral-700">
+          <p className="text-sm text-neutral-500 dark:text-neutral-400">No accounts yet.</p>
+          <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">
+            Add your first account to get started.
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">

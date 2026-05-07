@@ -90,25 +90,25 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
 
   return (
     <>
-      <Card className="group border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm">
+      <Card className="group border-neutral-200 transition-all hover:border-neutral-300 hover:shadow-sm dark:border-neutral-800 dark:hover:border-neutral-700">
         <CardContent className="space-y-3 p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="truncate font-semibold text-neutral-900">{goal.name}</p>
+              <p className="truncate font-semibold text-neutral-900 dark:text-white">{goal.name}</p>
               {goal.linkedAccount && (
-                <p className="mt-0.5 text-xs text-neutral-400">
+                <p className="mt-0.5 text-xs text-neutral-400 dark:text-neutral-300">
                   Auto-tracking · {goal.linkedAccount.name}
                 </p>
               )}
             </div>
             <div className="flex shrink-0 items-center gap-1">
               {isComplete && (
-                <Badge className="bg-emerald-50 text-xs text-emerald-700 hover:bg-emerald-50">
+                <Badge className="bg-emerald-50 text-xs text-emerald-700 hover:bg-emerald-50 dark:bg-emerald-900/30 dark:text-emerald-300 dark:hover:bg-emerald-900/30">
                   Complete!
                 </Badge>
               )}
               <DropdownMenu>
-                <DropdownMenuTrigger className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700">
+                <DropdownMenuTrigger className="rounded p-1 text-neutral-400 opacity-0 transition-opacity group-hover:opacity-100 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200">
                   <MoreHorizontal className="size-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-40">
@@ -138,7 +138,7 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
 
           {/* Progress bar */}
           <div className="space-y-1">
-            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100">
+            <div className="h-2 w-full overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-700/50">
               <div
                 className={cn(
                   'h-full rounded-full transition-all',
@@ -147,11 +147,11 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
                 style={{ width: `${percent}%` }}
               />
             </div>
-            <div className="flex justify-between text-xs text-neutral-500">
+            <div className="flex justify-between text-xs text-neutral-500 dark:text-neutral-400">
               <span>
                 <Currency
                   cents={effectiveCurrent}
-                  className="text-xs font-medium text-neutral-700"
+                  className="text-xs font-medium text-neutral-700 dark:text-neutral-200"
                 />
               </span>
               <span>
@@ -162,7 +162,7 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
 
           {/* ETA or deadline */}
           {(eta || goal.targetDate) && (
-            <div className="flex items-center justify-between text-xs text-neutral-400">
+            <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-neutral-300">
               {goal.targetDate && (
                 <span>
                   By{' '}
@@ -172,11 +172,15 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
                   })}
                 </span>
               )}
-              {eta && !isComplete && <span className="text-blue-600">{eta}</span>}
+              {eta && !isComplete && (
+                <span className="text-blue-600 dark:text-blue-400">{eta}</span>
+              )}
             </div>
           )}
 
-          <div className="text-xs text-neutral-400">{Math.round(percent)}% complete</div>
+          <div className="text-xs text-neutral-400 dark:text-neutral-300">
+            {Math.round(percent)}% complete
+          </div>
         </CardContent>
       </Card>
 
@@ -207,7 +211,7 @@ export function GoalCard({ goal, accounts }: GoalCardProps) {
             <div className="space-y-1.5">
               <Label htmlFor="progress-amount">Current saved amount</Label>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-neutral-500">CAD $</span>
+                <span className="text-sm text-neutral-500 dark:text-neutral-400">CAD $</span>
                 <Input
                   id="progress-amount"
                   inputMode="decimal"

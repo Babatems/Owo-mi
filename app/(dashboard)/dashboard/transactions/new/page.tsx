@@ -10,14 +10,16 @@ async function NewTransactionContent() {
   const [accounts, categories] = await Promise.all([getAccounts(), getCategories()])
 
   if (accounts.length === 0) {
-    redirect('/accounts')
+    redirect('/dashboard/accounts')
   }
 
   return (
     <div className="max-w-lg">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-neutral-900">Add transaction</h1>
-        <p className="mt-0.5 text-sm text-neutral-500">Record a new expense or income.</p>
+        <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Add transaction</h1>
+        <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">
+          Record a new expense or income.
+        </p>
       </div>
       <Card className="border-neutral-200">
         <CardContent className="pt-6">

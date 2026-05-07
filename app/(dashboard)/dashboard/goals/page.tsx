@@ -19,8 +19,8 @@ async function GoalsList() {
     <div className="space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900">Savings Goals</h1>
-          <p className="mt-0.5 text-sm text-neutral-500">
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Savings Goals</h1>
+          <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">
             {goals.length} goal{goals.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -28,10 +28,10 @@ async function GoalsList() {
       </div>
 
       {goals.length === 0 ? (
-        <Card className="border-dashed border-neutral-200">
+        <Card className="border-dashed border-neutral-200 dark:border-neutral-700">
           <CardContent className="py-12 text-center">
-            <p className="text-sm text-neutral-500">No goals yet.</p>
-            <p className="mt-1 text-xs text-neutral-400">
+            <p className="text-sm text-neutral-500 dark:text-neutral-400">No goals yet.</p>
+            <p className="mt-1 text-xs text-neutral-400 dark:text-neutral-500">
               Create a savings goal — TFSA top-up, vacation, emergency fund, or anything else.
             </p>
           </CardContent>

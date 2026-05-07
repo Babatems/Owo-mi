@@ -22,8 +22,8 @@ async function TransactionsList() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900">Transactions</h1>
-          <p className="mt-0.5 text-sm text-neutral-500">
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Transactions</h1>
+          <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">
             {txs.length} transaction{txs.length !== 1 ? 's' : ''}
           </p>
         </div>
@@ -43,11 +43,11 @@ async function TransactionsList() {
         </div>
       </div>
 
-      <Card className="border-neutral-200">
+      <Card className="border-neutral-200 dark:border-neutral-800">
         <CardContent className="pt-4">
           {txs.length === 0 ? (
             <div className="py-10 text-center">
-              <p className="text-sm text-neutral-500">No transactions yet.</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">No transactions yet.</p>
               <Link href="/dashboard/transactions/new">
                 <Button variant="outline" size="sm" className="mt-3">
                   Add your first transaction

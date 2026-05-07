@@ -31,8 +31,8 @@ async function BudgetContent() {
     <div className="space-y-6">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-neutral-900">Budget</h1>
-          <p className="mt-0.5 text-sm text-neutral-500">{monthLabel}</p>
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Budget</h1>
+          <p className="mt-0.5 text-sm text-neutral-500 dark:text-neutral-400">{monthLabel}</p>
         </div>
         <AddBudgetButton categories={categories} />
       </div>
@@ -52,23 +52,25 @@ async function BudgetContent() {
       {/* Summary row */}
       {budgets.length > 0 && (
         <div className="grid grid-cols-3 gap-3">
-          <Card className="border-neutral-200">
+          <Card className="border-neutral-200 dark:border-neutral-800">
             <CardContent className="p-3">
-              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
+              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
                 Budgeted
               </p>
               <Currency cents={totalBudgeted} className="mt-1 text-lg font-semibold" />
             </CardContent>
           </Card>
-          <Card className="border-neutral-200">
+          <Card className="border-neutral-200 dark:border-neutral-800">
             <CardContent className="p-3">
-              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase">Spent</p>
+              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
+                Spent
+              </p>
               <Currency cents={totalActual} className="mt-1 text-lg font-semibold" />
             </CardContent>
           </Card>
-          <Card className="border-neutral-200">
+          <Card className="border-neutral-200 dark:border-neutral-800">
             <CardContent className="p-3">
-              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase">
+              <p className="text-xs font-medium tracking-wide text-neutral-500 uppercase dark:text-neutral-400">
                 Remaining
               </p>
               <Currency
@@ -84,9 +86,9 @@ async function BudgetContent() {
       )}
 
       {/* Budget rows */}
-      <Card className="border-neutral-200">
+      <Card className="border-neutral-200 dark:border-neutral-800">
         <CardHeader>
-          <CardTitle className="text-sm font-medium text-neutral-700">
+          <CardTitle className="text-sm font-medium text-neutral-700 dark:text-neutral-200">
             {budgets.length > 0
               ? `${budgets.length} budget${budgets.length !== 1 ? 's' : ''}`
               : 'No budgets yet'}
@@ -97,18 +99,20 @@ async function BudgetContent() {
             <div className="space-y-2 py-8 text-center">
               {expenseCategories.length === 0 ? (
                 <>
-                  <p className="text-sm text-neutral-500">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
                     You need expense categories before adding budgets.
                   </p>
-                  <p className="text-xs text-neutral-400">
+                  <p className="text-xs text-neutral-400 dark:text-neutral-500">
                     Go to Transactions → add a transaction to create categories, or ask your family
                     admin.
                   </p>
                 </>
               ) : (
                 <>
-                  <p className="text-sm text-neutral-500">No budgets set for {monthLabel}.</p>
-                  <p className="text-xs text-neutral-400">
+                  <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                    No budgets set for {monthLabel}.
+                  </p>
+                  <p className="text-xs text-neutral-400 dark:text-neutral-500">
                     Click &ldquo;Add budget&rdquo; to set spending limits per category.
                   </p>
                 </>
@@ -125,7 +129,7 @@ async function BudgetContent() {
       </Card>
 
       {budgets.length > 0 && (
-        <p className="text-xs text-neutral-400">
+        <p className="text-xs text-neutral-400 dark:text-neutral-500">
           Budgets track expenses in the current month. Bi-weekly and weekly periods are supported —
           set the period start date when adding a budget.
         </p>
