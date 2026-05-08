@@ -18,7 +18,7 @@ async function SettingsContent() {
   const members = family ? await getFamilyMembers(family.id) : []
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="space-y-6">
       <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">Settings</h1>
 
       {/* Account */}
@@ -111,7 +111,7 @@ async function SettingsContent() {
 
 export default function SettingsPage() {
   return (
-    <Suspense fallback={<Skeleton className="h-60 w-full max-w-2xl" />}>
+    <Suspense fallback={<Skeleton className="h-60 w-full" />}>
       <SettingsContent />
     </Suspense>
   )
