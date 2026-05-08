@@ -85,7 +85,7 @@ export async function Hero() {
               {t('subheadline')}
             </p>
 
-            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:items-start">
+            <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center lg:items-start lg:justify-start">
               <Link
                 href="/sign-up"
                 className="w-full rounded-xl px-6 py-3.5 text-center text-base font-semibold text-white shadow-sm transition-all hover:opacity-90 active:scale-[0.98] sm:w-auto"

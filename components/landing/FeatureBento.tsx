@@ -176,7 +176,7 @@ export async function FeatureBento() {
             {/* Goal ring placeholder */}
             <div className="mt-4 flex items-center justify-center">
               <div className="relative">
-                <svg width="80" height="80" viewBox="0 0 80 80" aria-hidden="true">
+                <svg width="120" height="120" viewBox="0 0 80 80" aria-hidden="true">
                   <circle cx="40" cy="40" r="32" fill="none" stroke="#e5e7eb" strokeWidth="6" />
                   <circle
                     cx="40"
@@ -247,7 +247,7 @@ export async function FeatureBento() {
               </span>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border-2 border-[var(--brand)] bg-[var(--brand-light)] p-3 dark:bg-[var(--brand)]/10">
+              <div className="flex flex-col rounded-xl border-2 border-[var(--brand)] bg-[var(--brand-light)] p-3 dark:bg-[var(--brand)]/10">
                 <p className="mb-1 text-xs font-semibold text-[var(--brand)]">EN</p>
                 <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
                   &quot;Finally know where your money goes.&quot;
@@ -257,7 +257,7 @@ export async function FeatureBento() {
                   <p>🇨🇦 PIPEDA compliant</p>
                 </div>
               </div>
-              <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800">
+              <div className="flex flex-col rounded-xl border-2 border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-700 dark:bg-neutral-800">
                 <p className="mb-1 text-xs font-semibold text-neutral-400">FR</p>
                 <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
                   &quot;Votre argent. En entier. Enfin clair.&quot;
