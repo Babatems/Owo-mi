@@ -5,7 +5,7 @@ import { routing } from '@/i18n/routing'
 const intlMiddleware = createNextIntlMiddleware(routing)
 
 const DASHBOARD_PREFIX = '/dashboard'
-const AUTH_PATHS = ['/sign-in', '/sign-up', '/verify', '/mfa']
+const AUTH_PATHS = ['/sign-in', '/sign-up', '/mfa']
 
 async function getSession(request: NextRequest): Promise<{ user?: { id: string } } | null> {
   try {

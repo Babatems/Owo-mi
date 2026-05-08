@@ -3,28 +3,11 @@ import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { twoFactor, organization } from 'better-auth/plugins'
 import { db } from '@/lib/db'
 import * as authSchema from '@/lib/db/auth-schema'
-import { resend, EMAIL_FROM } from '@/lib/email'
-import { verificationEmailHtml } from '@/lib/email/templates'
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, { provider: 'pg', schema: authSchema }),
   emailAndPassword: {
     enabled: true,
-    requireEmailVerification: true,
-    sendVerificationEmail: async ({
-      user,
-      url,
-    }: {
-      user: { email: string; name: string }
-      url: string
-    }) => {
-      await resend.emails.send({
-        from: EMAIL_FROM,
-        to: user.email,
-        subject: 'Confirm your Owó-mi account',
-        html: verificationEmailHtml({ name: user.name, url }),
-      })
-    },
   },
   plugins: [
     twoFactor({
