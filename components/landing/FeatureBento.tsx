@@ -174,9 +174,9 @@ export async function FeatureBento() {
             </div>
 
             {/* Goal ring placeholder */}
-            <div className="mt-4 flex items-center justify-center">
+            <div className="mt-11 flex items-center justify-center">
               <div className="relative">
-                <svg width="160" height="160" viewBox="0 0 80 80" aria-hidden="true">
+                <svg width="200" height="200" viewBox="0 0 80 80" aria-hidden="true">
                   <circle cx="40" cy="40" r="32" fill="none" stroke="#e5e7eb" strokeWidth="6" />
                   <circle
                     cx="40"
