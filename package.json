@@ -11,6 +11,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "node scripts/migrate.mjs",
     "db:studio": "drizzle-kit studio",
+    "inngest:dev": "npx inngest-cli@latest dev -u http://localhost:3000/api/inngest",
     "prepare": "node -e \"if(!process.env.CI && !process.env.VERCEL){require('child_process').execSync('husky',{stdio:'inherit'})}\""
   },
   "lint-staged": {
@@ -23,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "@aws-sdk/client-kms": "^3.1045.0",
     "@base-ui/react": "^1.4.1",
     "@hookform/resolvers": "^5.2.2",
     "@tanstack/react-query": "^5.100.9",
@@ -33,16 +35,20 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "drizzle-orm": "^0.45.2",
+    "inngest": "^4.3.0",
+    "jose": "^6.2.3",
     "lucide-react": "^1.14.0",
     "motion": "^12.38.0",
     "next": "16.2.4",
     "next-intl": "^4.11.0",
     "next-themes": "^0.4.6",
     "papaparse": "^5.5.3",
+    "plaid": "^42.2.0",
     "postgres": "^3.4.9",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hook-form": "^7.75.0",
+    "react-plaid-link": "^4.1.1",
     "recharts": "^3.8.1",
     "resend": "^6.12.3",
     "shadcn": "^4.7.0",

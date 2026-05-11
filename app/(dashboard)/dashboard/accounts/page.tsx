@@ -2,6 +2,7 @@ import { Suspense } from 'react'
 import { getAccounts } from '@/lib/actions/accounts'
 import { AccountCard } from '@/components/accounts/account-card'
 import { AccountForm } from '@/components/accounts/account-form'
+import { ConnectBankButton } from '@/components/bank-connection/ConnectBankButton'
 import {
   Dialog,
   DialogContent,
@@ -26,18 +27,23 @@ async function AccountsList() {
             {accounts.length} account{accounts.length !== 1 ? 's' : ''}
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger className={cn(buttonVariants({ size: 'sm' }), 'gap-1.5')}>
-            <Plus className="size-4" />
-            Add account
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Add account</DialogTitle>
-            </DialogHeader>
-            <AccountForm />
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-2">
+          <ConnectBankButton />
+          <Dialog>
+            <DialogTrigger
+              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1.5')}
+            >
+              <Plus className="size-4" />
+              Add manually
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-sm">
+              <DialogHeader>
+                <DialogTitle>Add account</DialogTitle>
+              </DialogHeader>
+              <AccountForm />
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       {accounts.length === 0 ? (
