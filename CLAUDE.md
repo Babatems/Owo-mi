@@ -37,10 +37,18 @@ npm run db:studio    # Open Drizzle Studio (DB browser)
 - `lib/db/schema.ts` — single source of truth for all Drizzle table definitions
 - `lib/auth/server.ts` — Better Auth server config (email+password, TOTP via `twoFactor`, magic-link, Organizations plugin; passkey is NOT available in Better Auth v1.6.x)
 - `lib/actions/utils.ts` — `withFamilyContext` wrapper; **every server action must use this**
+- `lib/actions/connections.ts` — server actions for bank connections (Plaid + Flinks)
 - `lib/validations/schemas.ts` — all Zod schemas shared between forms and server actions
+- `lib/aggregators/plaid.ts` — Plaid API client wrapper
+- `lib/aggregators/flinks.ts` — Flinks API client wrapper
+- `lib/crypto/envelope.ts` — AWS KMS envelope encryption for storing access tokens; `seal(plaintext, aad)` / `open(sealed, aad)`
 - `proxy.ts` — Next.js 16 route protection + RLS context injection (renamed from middleware)
 - `scripts/migrate.mjs` — runs Drizzle migrations directly via drizzle-orm (bypasses drizzle-kit CLI SSL bug)
 - `drizzle.config.ts` — Drizzle config with `ssl: 'require'` for Supabase
+- `inngest/` — background sync jobs (Plaid + Flinks initial sync)
+- `components/bank-connection/` — bank connection UI (wizard, Flinks widget, account mapping form, sync progress)
+- `app/api/plaid/webhooks/` — Plaid webhook handler
+- `app/api/flinks/webhooks/` — Flinks webhook handler
 
 **Money:** All monetary values are stored as integer cents (e.g., $12.34 → `1234`). Never use floats for amounts.
 
@@ -130,6 +138,27 @@ CREATE POLICY "family_isolation" ON transaction_tags
 **Migration tracking:** Drizzle migrations are tracked in `drizzle.__drizzle_migrations` (the `drizzle` schema). `npm run db:migrate` uses `scripts/migrate.mjs` directly — drizzle-kit's CLI has a known SSL timeout bug with Supabase in v0.31.
 
 **Connection string:** use the Direct connection (not pooler) from Supabase → Project Settings → Database. Set as `DATABASE_URL` in `.env.local`. The `lib/db/index.ts` stub prevents build crashes if the URL still contains `[YOUR-` placeholder text.
+
+## Bank Connection (Flinks / Plaid)
+
+The bank connection infrastructure (aggregators, crypto, actions, Inngest jobs, webhook routes, UI components) is fully scaffolded but **not yet production-ready**.
+
+- **Connect Bank button** is intentionally disabled with a "Coming Soon" tooltip (`components/bank-connection/ConnectBankButton.tsx`). Do not re-enable it until Flinks credentials are obtained and the import flow is tested end-to-end.
+- **Next feature:** importing bank statements manually (CSV). Work on this when the user is ready.
+- **Flinks env vars** required in `.env.local` (all currently set to sandbox/empty):
+  - `NEXT_PUBLIC_FLINKS_ENV`, `NEXT_PUBLIC_FLINKS_INSTANCE` — client-side widget URL
+  - `FLINKS_INSTANCE`, `FLINKS_CUSTOMER_ID`, `FLINKS_API_KEY` — server-side API calls
+  - `FLINKS_WEBHOOK_SECRET` — webhook signature verification
+- **Access token encryption:** uses AWS KMS envelope encryption (`lib/crypto/envelope.ts`). The `seal(plaintext, connectionId)` / `open(sealed, connectionId)` pair binds ciphertext to its row via AAD. AWS creds (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `KMS_KEY_ID`) must be set in all environments.
+- **Inngest:** background sync jobs live in `inngest/`. Set `INNGEST_DEV=1` locally; remove it and fill `INNGEST_EVENT_KEY` + `INNGEST_SIGNING_KEY` for production.
+
+## ESLint Gotchas
+
+- **`react-hooks/set-state-in-effect`** is an **error** (blocks commits). Never call `setState` directly in a `useEffect` body. For reading browser-only APIs on mount, use a lazy state initializer instead:
+  ```ts
+  const [value] = useState(() => (typeof window !== 'undefined' ? window.location.href : undefined))
+  ```
+- **`@typescript-eslint/no-unused-vars`** does **not** exempt `_`-prefixed variables in this project's config — they are still flagged. Remove the unused binding entirely instead of prefixing with `_`.
 
 ## Vercel Deployment
 
