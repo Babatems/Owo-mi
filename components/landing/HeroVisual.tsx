@@ -137,7 +137,7 @@ export function HeroVisual() {
           initial={{ opacity: 0, x: 20, y: -10 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.5, delay: 0.7 }}
-          className="absolute top-8 -right-12 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
+          className="absolute top-15 -right-17 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
         >
           <p className="text-xs font-semibold text-[var(--brand)]">🇨🇦 Data in Canada</p>
         </motion.div>
@@ -147,7 +147,7 @@ export function HeroVisual() {
           initial={{ opacity: 0, x: -20, y: 10 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
           transition={{ duration: 0.5, delay: 0.9 }}
-          className="absolute -bottom-5 -left-4 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
+          className="absolute bottom-15 -left-29 hidden rounded-xl border border-neutral-200/80 bg-white px-3 py-2 shadow-lg lg:block dark:border-neutral-700 dark:bg-neutral-800"
         >
           <p className="text-xs font-semibold text-neutral-700 dark:text-neutral-200">
             ✓ Read-only access
