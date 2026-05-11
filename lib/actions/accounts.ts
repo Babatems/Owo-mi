@@ -3,7 +3,7 @@
 import { eq, and, isNull } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
-import { financialAccounts } from '@/lib/db/schema'
+import { financialAccounts, transactions } from '@/lib/db/schema'
 import { createAccountSchema, updateAccountSchema } from '@/lib/validations/schemas'
 import { getSession, getActiveFamilyId, withFamilyContext, writeAuditLog } from './utils'
 import type { ActionResult } from './utils'
@@ -128,12 +128,23 @@ export async function deleteAccount(id: string): Promise<ActionResult<void>> {
   const existing = await getAccount(id)
   if (!existing) return { success: false, error: 'Account not found' }
 
-  await withFamilyContext(familyId, () =>
-    db
+  const now = new Date()
+  await withFamilyContext(familyId, async () => {
+    await db
+      .update(transactions)
+      .set({ deletedAt: now })
+      .where(
+        and(
+          eq(transactions.accountId, id),
+          eq(transactions.familyId, familyId),
+          isNull(transactions.deletedAt)
+        )
+      )
+    await db
       .update(financialAccounts)
-      .set({ deletedAt: new Date() })
+      .set({ deletedAt: now })
       .where(and(eq(financialAccounts.id, id), eq(financialAccounts.familyId, familyId)))
-  )
+  })
 
   await writeAuditLog({
     familyId,
@@ -145,5 +156,6 @@ export async function deleteAccount(id: string): Promise<ActionResult<void>> {
   })
 
   revalidatePath('/accounts')
+  revalidatePath('/dashboard/transactions')
   return { success: true, data: undefined }
 }

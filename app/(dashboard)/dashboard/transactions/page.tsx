@@ -4,10 +4,11 @@ import { getTransactions } from '@/lib/actions/transactions'
 import { getAccounts } from '@/lib/actions/accounts'
 import { getCategories } from '@/lib/actions/categories'
 import { TransactionRow } from '@/components/transactions/transaction-row'
+import { ImportTransactionButton } from '@/components/transactions/import-button'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Plus, Upload } from 'lucide-react'
+import { Plus } from 'lucide-react'
 
 async function TransactionsList() {
   const [txs, accounts, categories] = await Promise.all([
@@ -28,12 +29,7 @@ async function TransactionsList() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Link href="/dashboard/transactions/import">
-            <Button size="sm" variant="outline" className="gap-1.5">
-              <Upload className="size-4" />
-              Import
-            </Button>
-          </Link>
+          <ImportTransactionButton />
           <Link href="/dashboard/transactions/new">
             <Button size="sm" className="gap-1.5">
               <Plus className="size-4" />
