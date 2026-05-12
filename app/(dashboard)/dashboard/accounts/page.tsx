@@ -1,19 +1,9 @@
 import { Suspense } from 'react'
 import { getAccounts } from '@/lib/actions/accounts'
 import { AccountCard } from '@/components/accounts/account-card'
-import { AccountForm } from '@/components/accounts/account-form'
+import { AddAccountButton } from '@/components/accounts/add-account-button'
 import { ConnectBankButton } from '@/components/bank-connection/ConnectBankButton'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
-import { buttonVariants } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { Plus } from 'lucide-react'
 
 async function AccountsList() {
   const accounts = await getAccounts()
@@ -29,20 +19,7 @@ async function AccountsList() {
         </div>
         <div className="flex items-center gap-2">
           <ConnectBankButton />
-          <Dialog>
-            <DialogTrigger
-              className={cn(buttonVariants({ variant: 'outline', size: 'sm' }), 'gap-1.5')}
-            >
-              <Plus className="size-4" />
-              Add manually
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-sm">
-              <DialogHeader>
-                <DialogTitle>Add account</DialogTitle>
-              </DialogHeader>
-              <AccountForm />
-            </DialogContent>
-          </Dialog>
+          <AddAccountButton />
         </div>
       </div>
 

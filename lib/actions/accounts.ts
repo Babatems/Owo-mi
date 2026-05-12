@@ -83,7 +83,7 @@ export async function createAccount(input: unknown): Promise<ActionResult<{ id: 
     newValue: parsed.data,
   })
 
-  revalidatePath('/accounts')
+  revalidatePath('/dashboard/accounts')
   return { success: true, data: { id: account.id } }
 }
 
@@ -118,7 +118,7 @@ export async function updateAccount(input: unknown): Promise<ActionResult<void>>
     newValue: updates,
   })
 
-  revalidatePath('/accounts')
+  revalidatePath('/dashboard/accounts')
   return { success: true, data: undefined }
 }
 
@@ -155,7 +155,7 @@ export async function deleteAccount(id: string): Promise<ActionResult<void>> {
     oldValue: existing,
   })
 
-  revalidatePath('/accounts')
+  revalidatePath('/dashboard/accounts')
   revalidatePath('/dashboard/transactions')
   return { success: true, data: undefined }
 }
