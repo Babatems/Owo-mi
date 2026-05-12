@@ -56,13 +56,8 @@ export const createAccountSchema = z.object({
   institution: z.string().trim().optional(),
   last4: z
     .string()
-    .transform((v) => (v === '' ? undefined : v))
-    .pipe(
-      z
-        .string()
-        .regex(/^\d{4}$/, { error: 'Last 4 digits must be exactly 4 numbers' })
-        .optional()
-    ),
+    .regex(/^\d{4}$/, { error: 'Last 4 digits must be exactly 4 numbers' })
+    .optional(),
   notes: z.string().trim().optional(),
   contributionRoomCents: z.number().int().min(0).optional(),
 })

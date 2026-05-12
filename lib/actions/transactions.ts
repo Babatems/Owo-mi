@@ -74,9 +74,10 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
 
   const { tagIds, ...txData } = parsed.data
 
-  const { id: txId, categoryId: resolvedCategoryId } = await withFamilyContext(
-    familyId,
-    async () => {
+  let txId: string
+  let resolvedCategoryId: string | undefined
+  try {
+    const result = await withFamilyContext(familyId, async () => {
       // Auto-categorize inside the RLS context so categorization_rules are visible
       let categoryId = txData.categoryId
       if (!categoryId) {
@@ -99,11 +100,19 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
         )
 
       return { id: row.id, categoryId }
-    }
-  )
+    })
+    txId = result.id
+    resolvedCategoryId = result.categoryId
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Failed to save transaction'
+    return { success: false, error: msg }
+  }
 
   if (tagIds?.length) {
-    await db.insert(transactionTags).values(tagIds.map((tagId) => ({ transactionId: txId, tagId })))
+    await db
+      .insert(transactionTags)
+      .values(tagIds.map((tagId) => ({ transactionId: txId, tagId })))
+      .catch(() => {})
   }
 
   await writeAuditLog({
@@ -113,10 +122,10 @@ export async function createTransaction(input: unknown): Promise<ActionResult<{ 
     resourceType: 'transaction',
     resourceId: txId,
     newValue: { ...txData, categoryId: resolvedCategoryId },
-  })
+  }).catch(() => {})
 
-  revalidatePath('/transactions')
-  revalidatePath('/accounts', 'layout')
+  revalidatePath('/dashboard/transactions')
+  revalidatePath('/dashboard/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: { id: txId } }
 }
@@ -185,8 +194,8 @@ export async function updateTransaction(input: unknown): Promise<ActionResult<vo
     newValue: updates,
   })
 
-  revalidatePath('/transactions')
-  revalidatePath('/accounts', 'layout')
+  revalidatePath('/dashboard/transactions')
+  revalidatePath('/dashboard/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: undefined }
 }
@@ -220,8 +229,8 @@ export async function deleteTransaction(id: string): Promise<ActionResult<void>>
     oldValue: { amountCents: existing.amountCents, description: existing.description },
   })
 
-  revalidatePath('/transactions')
-  revalidatePath('/accounts', 'layout')
+  revalidatePath('/dashboard/transactions')
+  revalidatePath('/dashboard/accounts', 'layout')
   revalidatePath('/')
   return { success: true, data: undefined }
 }

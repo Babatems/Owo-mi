@@ -3,6 +3,7 @@
 @import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark, .dark *));
+@custom-variant hoverdevice (@media (hover: hover));
 
 @theme inline {
   --color-background: var(--background);

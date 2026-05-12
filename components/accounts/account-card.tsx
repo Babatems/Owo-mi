@@ -104,7 +104,7 @@ export function AccountCard({ account }: { account: Account }) {
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger
-                  className="rounded p-1 text-neutral-400 transition-opacity hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100"
+                  className="hoverdevice:opacity-0 hoverdevice:group-hover:opacity-100 rounded p-1 text-neutral-400 transition-opacity hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
                   onClick={(e) => e.preventDefault()}
                 >
                   <MoreHorizontal className="size-4" />

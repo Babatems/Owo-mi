@@ -67,12 +67,20 @@ export async function createAccount(input: unknown): Promise<ActionResult<{ id: 
 
   const id = crypto.randomUUID()
   const slug = makeSlug(parsed.data.name, id)
-  const [account] = await withFamilyContext(familyId, () =>
-    db
-      .insert(financialAccounts)
-      .values({ id, ...parsed.data, familyId, slug })
-      .returning({ id: financialAccounts.id })
-  )
+
+  let account: { id: string }
+  try {
+    const [row] = await withFamilyContext(familyId, () =>
+      db
+        .insert(financialAccounts)
+        .values({ id, ...parsed.data, familyId, slug })
+        .returning({ id: financialAccounts.id })
+    )
+    account = row
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Failed to create account'
+    return { success: false, error: msg }
+  }
 
   await writeAuditLog({
     familyId,
@@ -81,7 +89,7 @@ export async function createAccount(input: unknown): Promise<ActionResult<{ id: 
     resourceType: 'financial_account',
     resourceId: account.id,
     newValue: parsed.data,
-  })
+  }).catch(() => {})
 
   revalidatePath('/dashboard/accounts')
   return { success: true, data: { id: account.id } }
