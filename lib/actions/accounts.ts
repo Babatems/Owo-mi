@@ -59,7 +59,12 @@ export async function getAccountBySlug(slug: string) {
 
 export async function createAccount(input: unknown): Promise<ActionResult<{ id: string }>> {
   const session = await getSession()
-  const familyId = await getActiveFamilyId()
+  let familyId: string
+  try {
+    familyId = await getActiveFamilyId()
+  } catch {
+    return { success: false, error: 'No household found. Please complete your account setup.' }
+  }
   const parsed = createAccountSchema.safeParse(input)
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid input' }

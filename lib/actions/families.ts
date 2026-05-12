@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm'
 import { categories } from '@/lib/db/schema'
 import { member as memberTable, organization as orgTable } from '@/lib/db/auth-schema'
 import { DEFAULT_CATEGORIES } from '@/lib/data/default-categories'
-import { getSession, writeAuditLog } from './utils'
+import { getSession, withFamilyContext, writeAuditLog } from './utils'
 import { createFamilySchema, inviteMemberSchema } from '@/lib/validations/schemas'
 import type { ActionResult } from './utils'
 import { resend, EMAIL_FROM } from '@/lib/email'
@@ -20,22 +20,28 @@ export async function createFamily(input: unknown): Promise<ActionResult<{ id: s
     return { success: false, error: parsed.error.issues[0]?.message ?? 'Invalid input' }
   }
 
-  const org = await auth.api.createOrganization({
-    headers: await headers(),
-    body: {
-      name: parsed.data.name,
-      slug:
-        parsed.data.name
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '')
-          .trim()
-          .replace(/\s+/g, '-') +
-        '-' +
-        Date.now(),
-    },
-  })
+  let org: { id: string }
+  try {
+    org = await auth.api.createOrganization({
+      headers: await headers(),
+      body: {
+        name: parsed.data.name,
+        slug:
+          parsed.data.name
+            .toLowerCase()
+            .replace(/[^a-z0-9\s-]/g, '')
+            .trim()
+            .replace(/\s+/g, '-') +
+          '-' +
+          Date.now(),
+      },
+    })
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : 'Failed to create household'
+    return { success: false, error: msg }
+  }
 
-  await seedDefaultCategories(org.id)
+  await withFamilyContext(org.id, () => seedDefaultCategories(org.id)).catch(() => {})
   await writeAuditLog({
     familyId: org.id,
     userId: session.user.id,
@@ -43,7 +49,7 @@ export async function createFamily(input: unknown): Promise<ActionResult<{ id: s
     resourceType: 'family',
     resourceId: org.id,
     newValue: { name: parsed.data.name },
-  })
+  }).catch(() => {})
 
   return { success: true, data: { id: org.id } }
 }
@@ -182,5 +188,7 @@ async function seedDefaultCategories(familyId: string) {
     }
   }
 
-  await db.insert(categories).values(rows)
+  if (rows.length > 0) {
+    await db.insert(categories).values(rows)
+  }
 }

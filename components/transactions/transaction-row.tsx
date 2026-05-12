@@ -91,7 +91,7 @@ export function TransactionRow({
 
           {showActions && (
             <DropdownMenu>
-              <DropdownMenuTrigger className="hoverdevice:opacity-0 hoverdevice:group-hover:opacity-100 ml-1 rounded p-1 text-neutral-400 transition-opacity hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200">
+              <DropdownMenuTrigger className="ml-1 rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 dark:text-neutral-500 dark:hover:bg-neutral-800 dark:hover:text-neutral-200">
                 <MoreHorizontal className="size-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-36">
