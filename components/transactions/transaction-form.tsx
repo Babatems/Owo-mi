@@ -61,7 +61,7 @@ export function TransactionForm({
         onSuccess()
         router.refresh()
       } else {
-        router.push('/transactions')
+        router.push('/dashboard/transactions')
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save transaction')
