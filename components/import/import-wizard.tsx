@@ -4,7 +4,7 @@ import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { parseCSV } from '@/lib/import/parse'
 import { bulkImportTransactions } from '@/lib/actions/import'
-import type { NormalizedRow, ParseResult } from '@/lib/import/types'
+import type { NormalizedRow, ParseResult, ValidationReport } from '@/lib/import/types'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
@@ -34,30 +34,68 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
     null
   )
   const [isDragging, setIsDragging] = useState(false)
+  const [validationReport, setValidationReport] = useState<ValidationReport | null>(null)
+  const [pdfLoading, setPdfLoading] = useState(false)
 
-  function processFile(file: File) {
-    if (!file.name.endsWith('.csv') && file.type !== 'text/csv') {
-      setError('Please upload a CSV file.')
+  async function processFile(file: File) {
+    setError(undefined)
+    const isPdf = file.name.toLowerCase().endsWith('.pdf') || file.type === 'application/pdf'
+
+    if (!isPdf) {
+      if (!file.name.endsWith('.csv') && file.type !== 'text/csv') {
+        setError('Please upload a CSV or PDF file.')
+        return
+      }
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        try {
+          const text = e.target?.result as string
+          const result = parseCSV(text)
+          if (result.rows.length === 0) {
+            setError('No transactions found in this file. Check the format and try again.')
+            return
+          }
+          setParseResult(result)
+          setValidationReport(null)
+          setSelected(new Set(result.rows.map((_, i) => i)))
+          setError(undefined)
+          setStep('preview')
+        } catch {
+          setError('Failed to parse CSV. Make sure it is a valid CSV file from your bank.')
+        }
+      }
+      reader.readAsText(file)
       return
     }
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const text = e.target?.result as string
-        const result = parseCSV(text)
-        if (result.rows.length === 0) {
-          setError('No transactions found in this file. Check the format and try again.')
-          return
-        }
-        setParseResult(result)
-        setSelected(new Set(result.rows.map((_, i) => i)))
-        setError(undefined)
-        setStep('preview')
-      } catch {
-        setError('Failed to parse CSV. Make sure it is a valid CSV file from your bank.')
+
+    // PDF branch — server-side parsing
+    setPdfLoading(true)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/api/import/parse-pdf', { method: 'POST', body: fd })
+      if (!res.ok) {
+        const body = (await res.json().catch(() => ({}))) as { error?: string }
+        setError(body.error ?? 'Failed to parse PDF.')
+        return
       }
+      const result = (await res.json()) as ParseResult
+      if (result.rows.length === 0) {
+        setError(
+          result.errors[0] ?? 'No transactions found in this PDF. The format may not be supported.'
+        )
+        return
+      }
+      setParseResult(result)
+      setValidationReport(result.validationReport ?? null)
+      setSelected(new Set(result.rows.map((_, i) => i)))
+      setError(undefined)
+      setStep('preview')
+    } catch {
+      setError('Connection error. Please try again.')
+    } finally {
+      setPdfLoading(false)
     }
-    reader.readAsText(file)
   }
 
   const handleDrop = useCallback(
@@ -65,14 +103,15 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
       e.preventDefault()
       setIsDragging(false)
       const file = e.dataTransfer.files[0]
-      if (file) processFile(file)
+      if (file) void processFile(file)
     },
-    [accountId]
+
+    []
   )
 
   function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (file) processFile(file)
+    if (file) void processFile(file)
   }
 
   function toggleRow(i: number) {
@@ -148,26 +187,34 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
               ? 'border-neutral-400 bg-neutral-50'
               : 'border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50/50'
           )}
-          onClick={() => document.getElementById('csv-input')?.click()}
+          onClick={() => document.getElementById('bank-statement-input')?.click()}
         >
           <div className="flex size-12 items-center justify-center rounded-full bg-neutral-100">
             <Upload className="size-5 text-neutral-500" />
           </div>
           <div>
-            <p className="font-medium text-neutral-700">Drop your CSV file here</p>
-            <p className="mt-0.5 text-sm text-neutral-400">or click to browse</p>
+            <p className="font-medium text-neutral-700">Drop your bank statement here</p>
+            <p className="mt-0.5 text-sm text-neutral-400">CSV or PDF · or click to browse</p>
           </div>
           <p className="text-xs text-neutral-400">
-            Supports RBC, TD, Scotiabank, BMO, Tangerine, Desjardins
+            CSV: RBC, TD, Scotiabank, BMO, Tangerine, Desjardins · PDF: RBC, TD, CIBC, BMO,
+            Scotiabank
           </p>
           <input
-            id="csv-input"
+            id="bank-statement-input"
             type="file"
-            accept=".csv,text/csv"
+            accept=".csv,text/csv,.pdf,application/pdf"
             className="hidden"
             onChange={handleFileInput}
           />
         </div>
+
+        {pdfLoading && (
+          <div className="flex items-center gap-2 rounded-md bg-neutral-50 px-3 py-2 text-sm text-neutral-500">
+            <span className="size-4 animate-spin rounded-full border-2 border-neutral-300 border-t-neutral-600" />
+            Parsing PDF…
+          </div>
+        )}
 
         {error && (
           <div className="flex items-center gap-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
@@ -190,6 +237,7 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
             onClick={() => {
               setStep('upload')
               setParseResult(null)
+              setValidationReport(null)
             }}
             className="mb-2 -ml-1 flex items-center gap-1 text-sm text-neutral-500 hover:text-neutral-700"
           >
@@ -204,6 +252,51 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
             {parseResult.rows.length} transactions
           </p>
         </div>
+
+        {validationReport && (
+          <div
+            className={cn(
+              'rounded-lg border px-4 py-3 text-sm',
+              validationReport.isBalanced
+                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                : validationReport.discrepancyCents !== null
+                  ? 'border-amber-200 bg-amber-50 text-amber-800'
+                  : 'border-neutral-200 bg-neutral-50 text-neutral-600'
+            )}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="space-y-0.5">
+                {validationReport.statementPeriod && (
+                  <p className="font-medium">{validationReport.statementPeriod}</p>
+                )}
+                {validationReport.openingBalanceCents !== null && (
+                  <p>
+                    Opening: <Currency cents={validationReport.openingBalanceCents} />
+                  </p>
+                )}
+                {validationReport.closingBalanceCents !== null && (
+                  <p>
+                    Closing: <Currency cents={validationReport.closingBalanceCents} />
+                  </p>
+                )}
+              </div>
+              <div className="shrink-0 text-right">
+                {validationReport.isBalanced ? (
+                  <span className="flex items-center gap-1 font-medium text-emerald-700">
+                    <CheckCircle className="size-4" /> Balanced
+                  </span>
+                ) : validationReport.discrepancyCents !== null ? (
+                  <span className="flex items-center gap-1 font-medium text-amber-700">
+                    <AlertCircle className="size-4" />
+                    Discrepancy: <Currency cents={validationReport.discrepancyCents} />
+                  </span>
+                ) : (
+                  <span className="text-neutral-400">Balance check unavailable</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
 
         <Card className="border-neutral-200">
           <CardContent className="p-0">
@@ -308,6 +401,7 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
             setStep('upload')
             setParseResult(null)
             setImportResult(null)
+            setValidationReport(null)
           }}
         >
           <FileText className="mr-2 size-4" />

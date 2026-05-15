@@ -5,6 +5,7 @@ export type BankFormat =
   | 'bmo'
   | 'tangerine'
   | 'desjardins'
+  | 'cibc'
   | 'generic'
 
 export type NormalizedRow = {
@@ -14,9 +15,19 @@ export type NormalizedRow = {
   rawLine: string // original CSV line for debugging
 }
 
+export type ValidationReport = {
+  openingBalanceCents: number | null
+  closingBalanceCents: number | null
+  computedClosingCents: number | null
+  discrepancyCents: number | null
+  isBalanced: boolean
+  statementPeriod: string | null
+}
+
 export type ParseResult = {
   bank: BankFormat
   bankLabel: string
   rows: NormalizedRow[]
   errors: string[]
+  validationReport?: ValidationReport
 }

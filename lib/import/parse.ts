@@ -249,6 +249,9 @@ export function parseCSV(csvText: string): ParseResult {
     case 'desjardins':
       result = parseDesjardins(castParsed.data)
       break
+    case 'cibc':
+      result = parseGeneric(castParsed.data)
+      break
     default:
       result = parseGeneric(castParsed.data)
   }
