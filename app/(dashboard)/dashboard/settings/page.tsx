@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { SignOutButton } from '@/components/settings/sign-out-button'
 import { InviteForm } from '@/components/settings/invite-form'
+import { DeleteAccountDialog } from '@/components/settings/delete-account-dialog'
 
 async function SettingsContent() {
   const [session, family] = await Promise.all([
@@ -97,6 +98,28 @@ async function SettingsContent() {
               <InviteForm familyId={family.id} />
             </div>
           )}
+        </CardContent>
+      </Card>
+
+      {/* Danger zone */}
+      <Card className="border-red-200 dark:border-red-900/50">
+        <CardHeader>
+          <CardTitle className="text-sm font-medium text-red-700 dark:text-red-400">
+            Danger zone
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-neutral-800 dark:text-neutral-100">
+                Delete account
+              </p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                Permanently removes your account and all associated data.
+              </p>
+            </div>
+            <DeleteAccountDialog />
+          </div>
         </CardContent>
       </Card>
 

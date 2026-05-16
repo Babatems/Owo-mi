@@ -49,15 +49,16 @@ async function DashboardContent() {
 
   const monthStart = startOfMonth()
 
-  const [accounts, recentTxs, monthlyTxs, budgets, goals] = await Promise.all([
+  const [accounts, allTxs, budgets, goals] = await Promise.all([
     getAccounts(),
-    getTransactions({ limit: 8 }),
     getTransactions({ startDate: monthStart, limit: 100 }),
     getBudgetsWithActual(monthStart).catch(
       () => [] as Awaited<ReturnType<typeof getBudgetsWithActual>>
     ),
     getGoals().catch(() => [] as Awaited<ReturnType<typeof getGoals>>),
   ])
+  const monthlyTxs = allTxs
+  const recentTxs = allTxs.slice(0, 8)
 
   const netWorthCents = accounts.reduce(
     (sum: number, acc: { type: string; balanceCents: number }) =>
