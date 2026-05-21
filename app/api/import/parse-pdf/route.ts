@@ -28,9 +28,10 @@ export async function POST(req: Request): Promise<Response> {
     return Response.json({ error: 'File exceeds 20 MB limit' }, { status: 413 })
   }
 
-  // Read buffer and validate %PDF- magic bytes
+  // Read buffer and validate %PDF- magic bytes (scan first 1 KB — some PDFs have a leading BOM or comment)
   const buf = Buffer.from(await file.arrayBuffer())
-  if (buf.length < 5 || buf.subarray(0, 5).toString('ascii') !== '%PDF-') {
+  const header = buf.subarray(0, Math.min(buf.length, 1024)).toString('latin1')
+  if (!header.includes('%PDF-')) {
     return Response.json({ error: 'File is not a valid PDF' }, { status: 422 })
   }
 
@@ -40,7 +41,8 @@ export async function POST(req: Request): Promise<Response> {
     const result = await parsePDF(buf)
     return Response.json(result, { status: 200 })
   } catch (err) {
-    console.error('[parse-pdf]', err instanceof Error ? err.name : 'unknown')
-    return Response.json({ error: 'Failed to parse PDF' }, { status: 422 })
+    const msg = err instanceof Error ? `${err.name}: ${err.message}` : String(err)
+    console.error('[parse-pdf] error:', msg)
+    return Response.json({ error: `Failed to parse PDF: ${msg}` }, { status: 422 })
   }
 }

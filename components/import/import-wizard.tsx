@@ -407,7 +407,7 @@ export function ImportWizard({ accounts }: ImportWizardProps) {
           <FileText className="mr-2 size-4" />
           Import another file
         </Button>
-        <Button className="flex-1" onClick={() => router.push('/transactions')}>
+        <Button className="flex-1" onClick={() => router.push('/dashboard/transactions')}>
           View transactions
         </Button>
       </div>

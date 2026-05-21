@@ -22,7 +22,13 @@ function extractFragments(pages: PDFPage[]): TextFragment[] {
   const frags: TextFragment[] = []
   for (const page of pages) {
     for (const t of page.Texts) {
-      const text = t.R.map((r) => decodeURIComponent(r.T))
+      const text = t.R.map((r) => {
+        try {
+          return decodeURIComponent(r.T)
+        } catch {
+          return '' // Type3 custom glyph fonts produce malformed URI sequences
+        }
+      })
         .join('')
         .trim()
       if (text) frags.push({ x: t.x, y: t.y, text })
@@ -496,17 +502,93 @@ const scotiaProfile: BankProfile = {
   extractBalances: extractCommonBalances,
 }
 
+// ── Scotiabank Visa/Mastercard credit card profile ────────────────────────────
+//
+// Actual row structure (from PDF extraction):
+//   cells[0]     = 3-digit ref number          e.g. "001"
+//   cells[1]     = transaction date "MMM DD"   e.g. "Mar 19"
+//   cells[2]     = posting date "MMM DD"        e.g. "Mar 20"  (skipped)
+//   cells[3..n]  = description (1 or more cells, e.g. USD conversion note splits across 2)
+//   cells[last]  = amount                       e.g. "19.69"
+//   OR cells[second-to-last] = amount, cells[last] = "-"  for payments/credits
+//
+// Examples:
+//   ["001","Mar 19","Mar 20","Subway 12123  Winnipeg MB","19.69"]
+//   ["003","Mar 20","Mar 21","PAYMENT FROM - *****14*5287","271.74","-"]
+//   ["008","Mar 26","Mar 27","AMT 80.19 USD","OW *joyagoo.com  Internet","113.61"]
+
+const SCOTIA_VISA_REF_RE = /^\d{3,4}$/ // transaction ref numbers like "001"
+const SCOTIA_VISA_AMOUNT_RE = /^\d{1,3}(?:,\d{3})*\.\d{2}$/ // plain decimal, no $ prefix
+const SCOTIA_CC_DATE_RE = /^([A-Za-z]{3})\s+(\d{1,2})$/ // "Mar 19"
+
+const scotiaVisaProfile: BankProfile = {
+  bank: 'scotiabank',
+  bankLabel: 'Scotiabank Visa',
+
+  parseRows(rows, period) {
+    const result: NormalizedRow[] = []
+    const errors: string[] = []
+    const year = period.year ?? new Date().getFullYear()
+
+    for (const row of rows) {
+      const cells = row.cells
+
+      // Only process rows that start with a 3-4 digit reference number
+      if (!SCOTIA_VISA_REF_RE.test(cells[0] ?? '')) continue
+
+      // cells[1] must be a transaction date "MMM DD"
+      const dateMatch = cells[1]?.match(SCOTIA_CC_DATE_RE)
+      if (!dateMatch) continue
+      const monthIdx = parseMonthName(dateMatch[1])
+      if (monthIdx === null) continue
+      const dayStr = dateMatch[2]
+
+      // Payments/credits: last cell is "-"; purchases: last cell is the amount
+      const isCredit = cells[cells.length - 1] === '-'
+      const amountIdx = isCredit ? cells.length - 2 : cells.length - 1
+      const amountStr = cells[amountIdx] ?? ''
+      if (!SCOTIA_VISA_AMOUNT_RE.test(amountStr)) continue
+      const amountCents = pdfDollarsToCents(amountStr)
+      if (amountCents === null) continue
+
+      // cells[2] is the posting date — skip it; cells[3..amountIdx-1] is the description
+      const description = cells
+        .slice(3, amountIdx)
+        .filter((c) => c && c.trim().length > 0)
+        .join(' ')
+        .trim()
+      if (!description) continue
+
+      // Credit card sign convention: payment/credit = positive, purchase = negative
+      const signedAmount = isCredit ? amountCents : -amountCents
+
+      const inferredYear = inferYear(monthIdx, year, period.endMonth)
+      const date = `${inferredYear}-${String(monthIdx + 1).padStart(2, '0')}-${dayStr.padStart(2, '0')}`
+
+      result.push({ date, description, amountCents: signedAmount, rawLine: JSON.stringify(cells) })
+    }
+
+    return { rows: result, errors }
+  },
+
+  extractBalances: extractCommonBalances,
+}
+
 // ── Profile registry ──────────────────────────────────────────────────────────
 
 function selectProfile(bank: BankFormat, headerText: string): BankProfile | null {
   if (bank === 'rbc') {
     return /visa|mastercard/i.test(headerText) ? rbcVisaProfile : rbcChequingProfile
   }
+  if (bank === 'scotiabank') {
+    return /visa|mastercard|credit card|carte de crédit/i.test(headerText)
+      ? scotiaVisaProfile
+      : scotiaProfile
+  }
   const map: Partial<Record<BankFormat, BankProfile>> = {
     cibc: cibcProfile,
     td: tdProfile,
     bmo: bmoProfile,
-    scotiabank: scotiaProfile,
   }
   return map[bank] ?? null
 }
