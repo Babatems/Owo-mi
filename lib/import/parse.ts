@@ -24,14 +24,13 @@ function parseDate(raw: string, format: BankFormat): string | null {
     return `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6, 8)}`
   }
 
-  // MM/DD/YYYY
-  const mdy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)
-  if (mdy) return `${mdy[3]}-${mdy[1].padStart(2, '0')}-${mdy[2].padStart(2, '0')}`
-
-  // DD/MM/YYYY
-  const dmy = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)
-  if (dmy && format === 'desjardins')
-    return `${dmy[3]}-${dmy[2].padStart(2, '0')}-${dmy[1].padStart(2, '0')}`
+  // Slash-delimited: DD/MM/YYYY (Desjardins/Quebec) or MM/DD/YYYY (all other banks)
+  const slashDate = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)
+  if (slashDate) {
+    if (format === 'desjardins')
+      return `${slashDate[3]}-${slashDate[2].padStart(2, '0')}-${slashDate[1].padStart(2, '0')}`
+    return `${slashDate[3]}-${slashDate[1].padStart(2, '0')}-${slashDate[2].padStart(2, '0')}`
+  }
 
   // "Jan. 2 2024" or "Jan 2 2024" (Scotiabank)
   const months: Record<string, string> = {

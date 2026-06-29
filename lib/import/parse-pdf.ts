@@ -425,6 +425,7 @@ const scotiaProfile: BankProfile = {
     const result: NormalizedRow[] = []
     const errors: string[] = []
     const year = period.year ?? new Date().getFullYear()
+    let prevBalance: number | null = null
 
     for (const row of rows) {
       const cells = row.cells
@@ -477,14 +478,29 @@ const scotiaProfile: BankProfile = {
         .join(' ')
         .trim()
 
-      if (!description) continue
-      if (/opening balance|closing balance/i.test(description)) continue
+      // Opening/closing balance rows have a valid balance column — use them to anchor
+      // prevBalance so the first real transaction has a correct reference point.
+      if (!description || /opening balance|closing balance/i.test(description)) {
+        prevBalance = balanceCents
+        continue
+      }
 
-      // 5. Determine credit vs debit from description keywords
-      const isCredit = /\bdeposit|dep\b|payroll|salary|\bcredit\b|refund|interest earned/i.test(
-        description
-      )
-      const signedAmount = isCredit ? txnAmountCents : -txnAmountCents
+      // 5. Determine credit vs debit using the running balance column (ground truth).
+      //    If the balance increased vs the previous row, money came in (credit).
+      //    If it decreased, money went out (debit).
+      //    Fall back to keyword heuristic only for the very first transaction when no
+      //    prior balance is available (e.g. statement starts mid-page with no header row).
+      let signedAmount: number
+      if (prevBalance !== null) {
+        signedAmount =
+          balanceCents >= prevBalance ? Math.abs(txnAmountCents) : -Math.abs(txnAmountCents)
+      } else {
+        const isCredit = /\bdeposit|dep\b|payroll|salary|\bcredit\b|refund|interest earned/i.test(
+          description
+        )
+        signedAmount = isCredit ? txnAmountCents : -txnAmountCents
+      }
+      prevBalance = balanceCents
 
       // 6. Build date
       const monthNum = parseMonthName(cells[monthCellIdx] ?? '')
@@ -628,6 +644,18 @@ export async function parsePDF(buf: Buffer): Promise<ParseResult> {
   const pages = data.Pages
   if (!pages?.length) {
     return { bank: 'generic', bankLabel: 'Unknown Bank', rows: [], errors: ['PDF has no pages'] }
+  }
+
+  const totalTextItems = pages.reduce((sum, p) => sum + (p.Texts?.length ?? 0), 0)
+  if (totalTextItems === 0) {
+    return {
+      bank: 'generic',
+      bankLabel: 'Unknown Bank',
+      rows: [],
+      errors: [
+        "This PDF appears to be a scanned image with no readable text. Please download a digital statement from your bank's online portal instead, or use the CSV export option.",
+      ],
+    }
   }
 
   const allRows = pages.flatMap((page) => groupIntoRows(extractFragments([page])))

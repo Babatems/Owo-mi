@@ -73,17 +73,28 @@ export async function bulkImportTransactions(
 
     if (toInsert.length) {
       await db.insert(transactions).values(toInsert)
-
-      // Update account balance: sum of all inserted amounts
-      const delta = toInsert.reduce((sum, t) => sum + t.amountCents, 0)
-      await db
-        .update(financialAccounts)
-        .set({
-          balanceCents: sql`${financialAccounts.balanceCents} + ${delta}`,
-          updatedAt: new Date(),
-        })
-        .where(eq(financialAccounts.id, accountId))
     }
+
+    // Recalculate balance as the sum of all non-deleted transactions for this account.
+    // This is idempotent — importing the same statement twice won't drift the number,
+    // and importing statements out of order still produces the correct total.
+    const [balanceRow] = await db
+      .select({ total: sql<number>`COALESCE(SUM(${transactions.amountCents}), 0)` })
+      .from(transactions)
+      .where(
+        and(
+          eq(transactions.accountId, accountId),
+          eq(transactions.familyId, familyId),
+          isNull(transactions.deletedAt)
+        )
+      )
+    await db
+      .update(financialAccounts)
+      .set({
+        balanceCents: balanceRow?.total ?? 0,
+        updatedAt: new Date(),
+      })
+      .where(eq(financialAccounts.id, accountId))
 
     return { imported: toInsert.length, skipped: existingHashes.size }
   })
