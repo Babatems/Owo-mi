@@ -21,31 +21,24 @@
     "headline": "Tout ce dont vous avez besoin. Rien de superflu.",
     "subheadline": "Calme, clair et conçu pour la façon dont les Canadiens gèrent vraiment leur argent.",
     "block1": {
-      "headline": "Suivez chaque dollar, automatiquement.",
-      "body": "Reliez tous vos comptes canadiens en quelques minutes. Owó-mi catégorise chaque transaction et vous montre exactement où va votre argent."
+      "label": "Suivre",
+      "headline": "Téléversez un relevé. Voyez tout, instantanément.",
+      "body": "Déposez un CSV ou un PDF de RBC, TD, Scotiabank, BMO, CIBC et plus encore. Owó-mi lit chaque transaction et la classe automatiquement — aucune connexion bancaire requise."
     },
     "block2": {
-      "headline": "Atteignez vos objectifs d'épargne canadiens.",
-      "body": "REER, CELI, CELIAPP, REEE — connaissez vos droits de cotisation, fixez des cibles et suivez vos progrès en temps réel."
+      "label": "Épargner",
+      "headline": "Transformez chaque objectif en plan visible.",
+      "body": "Nouvelle voiture, prochain voyage, votre CELI — fixez une cible, reliez un compte pour un suivi automatique, et sachez exactement combien épargner chaque mois pour y arriver."
     },
     "block3": {
-      "headline": "Budgétez sans stress.",
-      "body": "Établissez des budgets mensuels par catégorie. Owó-mi vous signale les dépassements avant qu'ils surviennent — fini les mauvaises surprises en fin de mois."
+      "label": "Budget",
+      "headline": "Sachez avant de dépasser — pas après.",
+      "body": "Fixez une limite mensuelle par catégorie et Owó-mi vous alerte dès que vous approchez, comme un avis lorsqu'une carte dépasse le budget de 89 $. Fini les surprises de fin de mois."
     },
-    "bento": {
-      "spending": "Dépenses",
-      "income": "Revenus",
-      "savings": "Objectifs d'épargne",
-      "accounts": "Comptes reliés",
-      "bilingual": "Disponible en anglais et en français",
-      "tfsa": "CELI",
-      "rrsp": "REER",
-      "fhsa": "CELIAPP",
-      "resp": "REEE",
-      "contributionRoom": "droits de cotisation",
-      "budgetHealth": "Santé budgétaire",
-      "onTrack": "En bonne voie",
-      "nearLimit": "Proche de la limite"
+    "block4": {
+      "label": "Connecter",
+      "headline": "Tous vos comptes, une vue claire.",
+      "body": "Compte chèques, épargne, cartes de crédit, CELI, REER, CELIAPP — ajoutez tous vos comptes canadiens et voyez l'ensemble de votre situation financière au même endroit, peu importe votre banque."
     }
   },
   "testimonials": {

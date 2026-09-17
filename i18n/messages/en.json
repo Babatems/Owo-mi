@@ -21,31 +21,24 @@
     "headline": "Everything you need. Nothing you don't.",
     "subheadline": "Calm, clear, and built for how Canadians actually manage money.",
     "block1": {
-      "headline": "Track every dollar, automatically.",
-      "body": "Connect all your Canadian accounts in minutes. Owó-mi categorizes every transaction and shows you exactly where your money is going."
+      "label": "Track",
+      "headline": "Upload a statement. See everything, instantly.",
+      "body": "Drop in a CSV or PDF from RBC, TD, Scotiabank, BMO, CIBC, and more. Owó-mi reads every transaction and sorts it into categories automatically — no bank login required."
     },
     "block2": {
-      "headline": "Hit your Canadian savings goals.",
-      "body": "RRSP, TFSA, FHSA, RESP — know your contribution room, set targets, and watch your progress in real time."
+      "label": "Save",
+      "headline": "Turn any goal into a plan you can see.",
+      "body": "New car, next trip, your TFSA — set a target, link an account for automatic tracking, and know exactly how much to save each month to get there."
     },
     "block3": {
-      "headline": "Budget without the stress.",
-      "body": "Set monthly budgets for any category. Owó-mi flags overspend before it happens, so there are no more end-of-month surprises."
+      "label": "Budget",
+      "headline": "Know before you go over — not after.",
+      "body": "Set a monthly limit for any category and Owó-mi flags it the moment you're close, like a heads-up when a card is $89 over budget. No more surprises at month-end."
     },
-    "bento": {
-      "spending": "Spending",
-      "income": "Income",
-      "savings": "Savings Goals",
-      "accounts": "Connected Accounts",
-      "bilingual": "Available in English & French",
-      "tfsa": "TFSA",
-      "rrsp": "RRSP",
-      "fhsa": "FHSA",
-      "resp": "RESP",
-      "contributionRoom": "contribution room",
-      "budgetHealth": "Budget Health",
-      "onTrack": "On track",
-      "nearLimit": "Near limit"
+    "block4": {
+      "label": "Connect",
+      "headline": "Every account, one clear picture.",
+      "body": "Chequing, savings, credit cards, TFSA, RRSP, FHSA — add every Canadian account you have and see your full financial picture in one place, no matter which bank it's with."
     }
   },
   "testimonials": {
