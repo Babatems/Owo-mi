@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { HeroVisual } from './HeroVisual'
@@ -48,6 +49,18 @@ export async function Hero() {
       className="relative overflow-hidden pt-28 pb-16 sm:pt-36 sm:pb-24"
       aria-labelledby="hero-heading"
     >
+      {/* Background texture */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <Image
+          src="/images/landing_page/hero-section-currency-face-stack.avif"
+          alt=""
+          fill
+          priority
+          className="object-cover opacity-[0.06] grayscale dark:opacity-[0.08]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--marketing-bg)_0%,transparent_35%,var(--marketing-bg)_100%)] dark:bg-[linear-gradient(to_bottom,var(--marketing-bg-dark)_0%,transparent_35%,var(--marketing-bg-dark)_100%)]" />
+      </div>
+
       {/* Subtle radial gradient */}
       <div
         className="pointer-events-none absolute inset-0 opacity-25"
