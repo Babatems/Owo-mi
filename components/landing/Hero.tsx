@@ -56,7 +56,7 @@ export async function Hero() {
           alt=""
           fill
           priority
-          className="object-cover opacity-[0.06] grayscale dark:opacity-[0.08]"
+          className="object-cover opacity-[0.16] grayscale-[45%] dark:opacity-[0.08] dark:grayscale"
         />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,var(--marketing-bg)_0%,transparent_35%,var(--marketing-bg)_100%)] dark:bg-[linear-gradient(to_bottom,var(--marketing-bg-dark)_0%,transparent_35%,var(--marketing-bg-dark)_100%)]" />
       </div>
