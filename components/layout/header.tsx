@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
+import { useThemeTransition } from '@/lib/hooks/use-theme-transition'
 import { authClient, useSession } from '@/lib/auth/client'
 import { buttonVariants } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -22,22 +22,8 @@ import { cn } from '@/lib/utils'
 export function Header() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { theme, setTheme } = useTheme()
+  const { theme, handleThemeToggle } = useThemeTransition()
   const [signingOut, setSigningOut] = useState(false)
-
-  function handleThemeToggle(e: React.MouseEvent<HTMLButtonElement>) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    document.documentElement.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`)
-    document.documentElement.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`)
-    const next = theme === 'dark' ? 'light' : 'dark'
-    if (!document.startViewTransition) {
-      setTheme(next)
-      return
-    }
-    document.startViewTransition(() => {
-      setTheme(next)
-    })
-  }
 
   const initials = session?.user?.name
     ?.split(' ')

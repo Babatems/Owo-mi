@@ -4,30 +4,16 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useTheme } from 'next-themes'
 import { Sun, Moon, Menu, X } from 'lucide-react'
+import { useThemeTransition } from '@/lib/hooks/use-theme-transition'
 import { cn } from '@/lib/utils'
 
 export function LandingNav() {
   const t = useTranslations('nav')
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
+  const { theme, handleThemeToggle } = useThemeTransition()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-
-  function handleThemeToggle(e: React.MouseEvent<HTMLButtonElement>) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    document.documentElement.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`)
-    document.documentElement.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`)
-    const next = theme === 'dark' ? 'light' : 'dark'
-    if (!document.startViewTransition) {
-      setTheme(next)
-      return
-    }
-    document.startViewTransition(() => {
-      setTheme(next)
-    })
-  }
 
   const isEn = pathname.startsWith('/en')
   const altLocale = isEn ? 'fr' : 'en'
