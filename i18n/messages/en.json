@@ -14,11 +14,7 @@
     "trustLine": "No credit card · Read-only · Built in Canada"
   },
   "trust": {
-    "encryption": "AES-256 Encryption",
-    "dataCanada": "Data Hosted in Canada",
-    "readOnly": "Read-only Access",
-    "privacy": "PIPEDA & Law 25 Compliant",
-    "builtCanada": "Built in Canada"
+    "sectionLabel": "Built to connect with Canada's major banks"
   },
   "features": {
     "sectionLabel": "Features",

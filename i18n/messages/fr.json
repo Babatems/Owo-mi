@@ -14,11 +14,7 @@
     "trustLine": "Sans carte de crédit · Lecture seule · Conçu au Canada"
   },
   "trust": {
-    "encryption": "Chiffrement AES-256",
-    "dataCanada": "Données hébergées au Canada",
-    "readOnly": "Accès lecture seule",
-    "privacy": "Conforme à la LPRPDE et à la Loi 25",
-    "builtCanada": "Conçu au Canada"
+    "sectionLabel": "Conçu pour se connecter aux grandes banques canadiennes"
   },
   "features": {
     "sectionLabel": "Fonctionnalités",
