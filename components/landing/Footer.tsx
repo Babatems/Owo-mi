@@ -12,7 +12,7 @@ export async function LandingFooter() {
       className="border-t border-neutral-200/60 dark:border-neutral-800/60"
       aria-label="Footer"
     >
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-6xl px-4 pt-12 pb-32 sm:px-6 sm:pt-16 md:pb-16">
         {/* Main grid */}
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {/* Brand column */}
