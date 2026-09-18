@@ -1,16 +1,12 @@
 import { getTranslations } from 'next-intl/server'
+import Image from 'next/image'
 import { Star } from 'lucide-react'
 
-type LongTestimonial = {
+type Testimonial = {
   name: string
   location: string
   since: string
-  quote: string
-}
-
-type ShortQuote = {
-  name: string
-  location: string
+  avatar: string
   quote: string
 }
 
@@ -24,21 +20,21 @@ function StarRating() {
   )
 }
 
-function LongCard({ testimonial }: { testimonial: LongTestimonial }) {
+function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <article className="flex flex-col rounded-2xl border border-neutral-200/70 bg-white p-6 dark:border-neutral-700/60 dark:bg-neutral-900">
+    <article className="flex h-full w-[340px] shrink-0 flex-col rounded-2xl border border-neutral-200/70 bg-white p-6 shadow-sm sm:w-[380px] dark:border-neutral-700/60 dark:bg-neutral-900">
       <StarRating />
       <blockquote className="mt-4 flex-1 text-base leading-relaxed text-neutral-700 dark:text-neutral-300">
         &ldquo;{testimonial.quote}&rdquo;
       </blockquote>
       <footer className="mt-5 flex items-center gap-3">
-        <div
-          className="flex size-10 items-center justify-center rounded-full text-sm font-bold text-white"
-          style={{ backgroundColor: 'var(--brand)' }}
-          aria-hidden="true"
-        >
-          {testimonial.name[0]}
-        </div>
+        <Image
+          src={`/images/landing_page/testimonials/${testimonial.avatar}`}
+          alt=""
+          width={40}
+          height={40}
+          className="size-10 shrink-0 rounded-full object-cover"
+        />
         <div>
           <p className="text-sm font-semibold text-neutral-900 dark:text-white">
             {testimonial.name}
@@ -52,30 +48,16 @@ function LongCard({ testimonial }: { testimonial: LongTestimonial }) {
   )
 }
 
-function ShortCard({ quote }: { quote: ShortQuote }) {
-  return (
-    <article className="rounded-xl border border-neutral-200/70 bg-white p-4 dark:border-neutral-700/60 dark:bg-neutral-900">
-      <StarRating />
-      <blockquote className="mt-2.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
-        &ldquo;{quote.quote}&rdquo;
-      </blockquote>
-      <footer className="mt-3">
-        <p className="text-xs font-medium text-neutral-700 dark:text-neutral-300">{quote.name}</p>
-        <p className="text-xs text-neutral-400 dark:text-neutral-300">{quote.location}</p>
-      </footer>
-    </article>
-  )
-}
-
 export async function Testimonials() {
   const t = await getTranslations('testimonials')
 
-  const longItems = t.raw('items') as LongTestimonial[]
-  const shortItems = t.raw('shortQuotes') as ShortQuote[]
+  const items = t.raw('items') as Testimonial[]
+  // Duplicated so the track can loop seamlessly at the -50% mark.
+  const loopItems = [...items, ...items]
 
   return (
     <section
-      className="bg-neutral-50/60 py-20 sm:py-28 dark:bg-neutral-950/40"
+      className="reveal-on-scroll bg-neutral-50/60 py-20 sm:py-28 dark:bg-neutral-950/40"
       aria-labelledby="testimonials-heading"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -96,30 +78,22 @@ export async function Testimonials() {
             {t('subheadline')}
           </p>
         </div>
+      </div>
 
-        {/* 3 long testimonials */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {longItems.map((item, i) => (
-            <div
-              key={item.name}
-              className="reveal-on-scroll"
-              style={{ animationDelay: `${i * 80}ms` }}
-            >
-              <LongCard testimonial={item} />
-            </div>
-          ))}
-        </div>
-
-        {/* Short quote masonry */}
-        <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
-          {shortItems.map((q, i) => (
-            <div
-              key={q.name}
-              className="reveal-on-scroll mb-4 break-inside-avoid"
-              style={{ animationDelay: `${i * 50}ms` }}
-            >
-              <ShortCard quote={q} />
-            </div>
+      <div
+        className="w-full overflow-hidden"
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+          WebkitMaskImage:
+            'linear-gradient(to right, transparent, black 5%, black 95%, transparent)',
+        }}
+      >
+        <div
+          className="marquee-track flex w-max gap-5 px-4 sm:px-6"
+          style={{ willChange: 'transform' }}
+        >
+          {loopItems.map((item, i) => (
+            <TestimonialCard key={`${item.name}-${i}`} testimonial={item} />
           ))}
         </div>
       </div>
