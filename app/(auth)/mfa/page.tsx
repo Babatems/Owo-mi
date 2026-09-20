@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { authClient } from '@/lib/auth/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function MfaPage() {
   const router = useRouter()
+  const t = useTranslations('auth.mfa')
   const [code, setCode] = useState('')
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
@@ -23,7 +25,7 @@ export default function MfaPage() {
       await authClient.twoFactor.verifyTotp({ code })
       router.push('/')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Invalid code')
+      setError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setLoading(false)
     }
@@ -32,13 +34,13 @@ export default function MfaPage() {
   return (
     <Card className="border-neutral-200 shadow-sm">
       <CardHeader>
-        <CardTitle>Two-factor authentication</CardTitle>
-        <CardDescription>Enter the 6-digit code from your authenticator app.</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="code">Authenticator code</Label>
+            <Label htmlFor="code">{t('codeLabel')}</Label>
             <Input
               id="code"
               inputMode="numeric"
@@ -54,7 +56,7 @@ export default function MfaPage() {
             <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
           )}
           <Button type="submit" className="w-full" disabled={loading || code.length !== 6}>
-            {loading ? 'Verifying…' : 'Verify'}
+            {loading ? t('submitLoading') : t('submit')}
           </Button>
         </form>
       </CardContent>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { useThemeTransition } from '@/lib/hooks/use-theme-transition'
 import { authClient, useSession } from '@/lib/auth/client'
 import { buttonVariants } from '@/components/ui/button'
@@ -16,12 +17,14 @@ import {
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Menu, Sun, Moon } from 'lucide-react'
 import { Sidebar } from './sidebar'
+import { LanguageSwitcher } from '@/components/language-switcher'
 import { SignOutOverlay } from '@/components/auth/sign-out-overlay'
 import { cn } from '@/lib/utils'
 
 export function Header() {
   const { data: session } = useSession()
   const router = useRouter()
+  const t = useTranslations('header')
   const { theme, handleThemeToggle } = useThemeTransition()
   const [signingOut, setSigningOut] = useState(false)
 
@@ -35,7 +38,7 @@ export function Header() {
   async function handleSignOut() {
     setSigningOut(true)
     await authClient.signOut()
-    router.push('/en')
+    router.push('/')
   }
 
   return (
@@ -56,11 +59,14 @@ export function Header() {
 
         <div className="flex-1" />
 
+        {/* Language switcher */}
+        <LanguageSwitcher />
+
         {/* Theme toggle */}
         <button
           onClick={handleThemeToggle}
           className="flex size-9 items-center justify-center text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          aria-label={theme === 'dark' ? t('lightMode') : t('darkMode')}
           suppressHydrationWarning
         >
           <span className="flex items-center justify-center rounded-md p-1.5 transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-800">
@@ -85,11 +91,11 @@ export function Header() {
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => router.push('/dashboard/settings')}>
-              Settings
+              {t('settings')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-              Sign out
+              {t('signOut')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

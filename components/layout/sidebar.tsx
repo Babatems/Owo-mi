@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   LayoutDashboard,
   CreditCard,
@@ -13,16 +14,17 @@ import {
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { label: 'Accounts', href: '/dashboard/accounts', icon: CreditCard },
-  { label: 'Transactions', href: '/dashboard/transactions', icon: ArrowLeftRight },
-  { label: 'Budgets', href: '/dashboard/budgets', icon: PieChart },
-  { label: 'Goals', href: '/dashboard/goals', icon: Target },
-  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
-]
+  { key: 'dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { key: 'accounts', href: '/dashboard/accounts', icon: CreditCard },
+  { key: 'transactions', href: '/dashboard/transactions', icon: ArrowLeftRight },
+  { key: 'budgets', href: '/dashboard/budgets', icon: PieChart },
+  { key: 'goals', href: '/dashboard/goals', icon: Target },
+  { key: 'settings', href: '/dashboard/settings', icon: Settings },
+] as const
 
 export function Sidebar() {
   const pathname = usePathname()
+  const t = useTranslations('sidebar')
 
   return (
     <aside className="flex h-full w-56 flex-col border-r border-neutral-200 bg-white px-3 py-4 dark:border-neutral-800 dark:bg-neutral-950">
@@ -33,7 +35,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex-1 space-y-0.5">
-        {NAV_ITEMS.map(({ label, href, icon: Icon }) => {
+        {NAV_ITEMS.map(({ key, href, icon: Icon }) => {
           const active =
             href === '/dashboard' ? pathname === '/dashboard' : pathname.startsWith(href)
           return (
@@ -48,7 +50,7 @@ export function Sidebar() {
               )}
             >
               <Icon className="size-4 shrink-0" />
-              {label}
+              {t(key)}
             </Link>
           )
         })}

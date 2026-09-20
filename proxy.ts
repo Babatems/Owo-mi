@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import createNextIntlMiddleware from 'next-intl/middleware'
 import { routing } from '@/i18n/routing'
+import { LOCALE_COOKIE_NAME, isAppLocale } from '@/lib/i18n/locale'
 
 const intlMiddleware = createNextIntlMiddleware(routing)
 
@@ -22,9 +23,11 @@ async function getSession(request: NextRequest): Promise<{ user?: { id: string }
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  // Root: always redirect to English (French is opt-in via toggle)
+  // Root: redirect to the user's last-selected locale, defaulting to English
   if (pathname === '/') {
-    return NextResponse.redirect(new URL('/en', request.url))
+    const cookieLocale = request.cookies.get(LOCALE_COOKIE_NAME)?.value
+    const locale = isAppLocale(cookieLocale) ? cookieLocale : routing.defaultLocale
+    return NextResponse.redirect(new URL(`/${locale}`, request.url))
   }
 
   // Invitation acceptance: public, no auth required

@@ -153,6 +153,60 @@
     "compliance": "Conforme à la LPRPDE et à la Loi 25 du Québec. Données hébergées au Canada (Montréal). Responsable de la protection des renseignements personnels : confidentialite@owo-mi.ca",
     "builtIn": "Conçu au Canada",
     "copyright": "© 2026 Owó-mi. « Owó-mi » (oh-WOH MEE) signifie « mon argent » en yoruba.",
-    "switchLocale": "Français"
+    "switchLocale": "English"
+  },
+  "auth": {
+    "backToHome": "Retour à l'accueil",
+    "tagline": "Votre suivi budgétaire canadien",
+    "signIn": {
+      "title": "Se connecter",
+      "subtitle": "Heureux de vous revoir sur Owó-mi.",
+      "emailLabel": "Courriel",
+      "emailPlaceholder": "jane@exemple.ca",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter",
+      "submitLoading": "Connexion en cours…",
+      "noAccount": "Pas de compte?",
+      "signUpLink": "S'inscrire",
+      "genericError": "Échec de la connexion"
+    },
+    "signUp": {
+      "title": "Créez votre compte",
+      "subtitle": "Rejoignez Owó-mi et commencez à suivre vos finances en toute confidentialité et sécurité.",
+      "nameLabel": "Nom complet",
+      "namePlaceholder": "Jane Tremblay",
+      "emailLabel": "Courriel",
+      "emailPlaceholder": "jane@exemple.ca",
+      "passwordLabel": "Mot de passe",
+      "submit": "Créer un compte",
+      "submitLoading": "Création du compte…",
+      "haveAccount": "Vous avez déjà un compte?",
+      "signInLink": "Se connecter",
+      "dataResidency": "Vos données sont hébergées au Canada et ne sont jamais vendues.",
+      "genericError": "Échec de l'inscription"
+    },
+    "mfa": {
+      "title": "Authentification à deux facteurs",
+      "subtitle": "Entrez le code à 6 chiffres de votre application d'authentification.",
+      "codeLabel": "Code d'authentification",
+      "submit": "Vérifier",
+      "submitLoading": "Vérification…",
+      "genericError": "Code invalide"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "accounts": "Comptes",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "goals": "Objectifs",
+    "settings": "Paramètres"
+  },
+  "header": {
+    "settings": "Paramètres",
+    "signOut": "Se déconnecter",
+    "lightMode": "Passer au mode clair",
+    "darkMode": "Passer au mode sombre",
+    "switchLocale": "English"
   }
 }

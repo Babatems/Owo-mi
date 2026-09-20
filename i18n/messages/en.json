@@ -153,6 +153,60 @@
     "compliance": "PIPEDA & Quebec Law 25 compliant. Data hosted in Canada (Montréal). Privacy Officer: privacy@owo-mi.ca",
     "builtIn": "Built in Canada",
     "copyright": "© 2026 Owó-mi. \"Owó-mi\" (oh-WOH MEE) means \"my money\" in Yoruba.",
-    "switchLocale": "English"
+    "switchLocale": "Français"
+  },
+  "auth": {
+    "backToHome": "Back to home",
+    "tagline": "Your Canadian budget tracker",
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Welcome back to Owó-mi.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "jane@example.ca",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "submitLoading": "Signing in…",
+      "noAccount": "No account?",
+      "signUpLink": "Sign up",
+      "genericError": "Sign in failed"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Join Owó-mi and start tracking your finances privately and securely.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Jane Smith",
+      "emailLabel": "Email",
+      "emailPlaceholder": "jane@example.ca",
+      "passwordLabel": "Password",
+      "submit": "Create account",
+      "submitLoading": "Creating account…",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "dataResidency": "Your data is stored in Canada and never sold.",
+      "genericError": "Sign up failed"
+    },
+    "mfa": {
+      "title": "Two-factor authentication",
+      "subtitle": "Enter the 6-digit code from your authenticator app.",
+      "codeLabel": "Authenticator code",
+      "submit": "Verify",
+      "submitLoading": "Verifying…",
+      "genericError": "Invalid code"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "accounts": "Accounts",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "goals": "Goals",
+    "settings": "Settings"
+  },
+  "header": {
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "lightMode": "Switch to light mode",
+    "darkMode": "Switch to dark mode",
+    "switchLocale": "Français"
   }
 }

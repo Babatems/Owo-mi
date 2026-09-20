@@ -14,7 +14,7 @@ export function SignOutButton() {
   async function handleSignOut() {
     setSigningOut(true)
     await authClient.signOut()
-    router.push('/en')
+    router.push('/')
   }
 
   return (
