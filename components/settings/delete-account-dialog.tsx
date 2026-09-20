@@ -42,7 +42,7 @@ export function DeleteAccountDialog() {
         return
       }
       // Hard navigate to bust the session cookie cache and fully clear React state
-      window.location.replace('/en')
+      window.location.replace('/')
     })
   }
 

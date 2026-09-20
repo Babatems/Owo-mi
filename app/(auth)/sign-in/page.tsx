@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import type { Resolver } from 'react-hook-form'
@@ -19,6 +20,7 @@ type SignInValues = z.infer<typeof signInSchema>
 
 export default function SignInPage() {
   const router = useRouter()
+  const t = useTranslations('auth.signIn')
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
 
@@ -39,7 +41,7 @@ export default function SignInPage() {
       const params = new URLSearchParams(window.location.search)
       router.push(params.get('next') ?? '/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign in failed')
+      setError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setLoading(false)
     }
@@ -48,17 +50,17 @@ export default function SignInPage() {
   return (
     <Card className="border-neutral-200 shadow-sm">
       <CardHeader>
-        <CardTitle>Sign in</CardTitle>
-        <CardDescription>Welcome back to Owó-mi.</CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('emailLabel')}</Label>
             <Input
               id="email"
               type="email"
-              placeholder="jane@example.ca"
+              placeholder={t('emailPlaceholder')}
               {...form.register('email')}
             />
             {form.formState.errors.email && (
@@ -66,7 +68,7 @@ export default function SignInPage() {
             )}
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('passwordLabel')}</Label>
             <Input
               id="password"
               type="password"
@@ -81,19 +83,19 @@ export default function SignInPage() {
             <div className="rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
           )}
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Signing in…' : 'Sign in'}
+            {loading ? t('submitLoading') : t('submit')}
           </Button>
         </form>
 
         <Separator />
 
         <p className="text-center text-sm text-neutral-500 dark:text-neutral-400">
-          No account?{' '}
+          {t('noAccount')}{' '}
           <Link
             href="/sign-up"
             className="font-medium text-neutral-900 hover:underline dark:text-white"
           >
-            Sign up
+            {t('signUpLink')}
           </Link>
         </p>
       </CardContent>

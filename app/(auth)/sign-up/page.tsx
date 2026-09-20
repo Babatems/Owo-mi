@@ -3,6 +3,7 @@
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -27,6 +28,7 @@ export default function SignUpPage() {
 function SignUpForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const t = useTranslations('auth.signUp')
   const next = searchParams.get('next')
   const [error, setError] = useState<string>()
   const [loading, setLoading] = useState(false)
@@ -52,7 +54,7 @@ function SignUpForm() {
 
       router.push(next ?? '/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Sign up failed')
+      setError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setLoading(false)
     }
@@ -61,27 +63,25 @@ function SignUpForm() {
   return (
     <Card className="border-neutral-200 shadow-sm">
       <CardHeader>
-        <CardTitle>Create your account</CardTitle>
-        <CardDescription>
-          Join Owó-mi and start tracking your finances privately and securely.
-        </CardDescription>
+        <CardTitle>{t('title')}</CardTitle>
+        <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="name">Full name</Label>
-            <Input id="name" placeholder="Jane Smith" {...form.register('name')} />
+            <Label htmlFor="name">{t('nameLabel')}</Label>
+            <Input id="name" placeholder={t('namePlaceholder')} {...form.register('name')} />
             {form.formState.errors.name && (
               <p className="text-xs text-red-600">{form.formState.errors.name.message}</p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t('emailLabel')}</Label>
             <Input
               id="email"
               type="email"
-              placeholder="jane@example.ca"
+              placeholder={t('emailPlaceholder')}
               {...form.register('email')}
             />
             {form.formState.errors.email && (
@@ -90,7 +90,7 @@ function SignUpForm() {
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t('passwordLabel')}</Label>
             <Input
               id="password"
               type="password"
@@ -107,22 +107,22 @@ function SignUpForm() {
           )}
 
           <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? 'Creating account…' : 'Create account'}
+            {loading ? t('submitLoading') : t('submit')}
           </Button>
         </form>
 
         <p className="mt-4 text-center text-sm text-neutral-500 dark:text-neutral-400">
-          Already have an account?{' '}
+          {t('haveAccount')}{' '}
           <Link
             href="/sign-in"
             className="font-medium text-neutral-900 hover:underline dark:text-white"
           >
-            Sign in
+            {t('signInLink')}
           </Link>
         </p>
 
         <p className="mt-6 text-center text-xs text-neutral-400 dark:text-neutral-500">
-          Your data is stored in Canada and never sold.
+          {t('dataResidency')}
         </p>
       </CardContent>
     </Card>

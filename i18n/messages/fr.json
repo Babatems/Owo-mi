@@ -14,42 +14,31 @@
     "trustLine": "Sans carte de crédit · Lecture seule · Conçu au Canada"
   },
   "trust": {
-    "encryption": "Chiffrement AES-256",
-    "dataCanada": "Données hébergées au Canada",
-    "readOnly": "Accès lecture seule",
-    "privacy": "Conforme à la LPRPDE et à la Loi 25",
-    "builtCanada": "Conçu au Canada"
+    "sectionLabel": "Conçu pour se connecter aux grandes banques canadiennes"
   },
   "features": {
     "sectionLabel": "Fonctionnalités",
     "headline": "Tout ce dont vous avez besoin. Rien de superflu.",
     "subheadline": "Calme, clair et conçu pour la façon dont les Canadiens gèrent vraiment leur argent.",
     "block1": {
-      "headline": "Suivez chaque dollar, automatiquement.",
-      "body": "Reliez tous vos comptes canadiens en quelques minutes. Owó-mi catégorise chaque transaction et vous montre exactement où va votre argent."
+      "label": "Suivre",
+      "headline": "Téléversez un relevé. Voyez tout, instantanément.",
+      "body": "Déposez un CSV ou un PDF de RBC, TD, Scotiabank, BMO, CIBC et plus encore. Owó-mi lit chaque transaction et la classe automatiquement — aucune connexion bancaire requise."
     },
     "block2": {
-      "headline": "Atteignez vos objectifs d'épargne canadiens.",
-      "body": "REER, CELI, CELIAPP, REEE — connaissez vos droits de cotisation, fixez des cibles et suivez vos progrès en temps réel."
+      "label": "Épargner",
+      "headline": "Transformez chaque objectif en plan visible.",
+      "body": "Nouvelle voiture, prochain voyage, votre CELI — fixez une cible, reliez un compte pour un suivi automatique, et sachez exactement combien épargner chaque mois pour y arriver."
     },
     "block3": {
-      "headline": "Budgétez sans stress.",
-      "body": "Établissez des budgets mensuels par catégorie. Owó-mi vous signale les dépassements avant qu'ils surviennent — fini les mauvaises surprises en fin de mois."
+      "label": "Budget",
+      "headline": "Sachez avant de dépasser — pas après.",
+      "body": "Fixez une limite mensuelle par catégorie et Owó-mi vous alerte dès que vous approchez, comme un avis lorsqu'une carte dépasse le budget de 89 $. Fini les surprises de fin de mois."
     },
-    "bento": {
-      "spending": "Dépenses",
-      "income": "Revenus",
-      "savings": "Objectifs d'épargne",
-      "accounts": "Comptes reliés",
-      "bilingual": "Disponible en anglais et en français",
-      "tfsa": "CELI",
-      "rrsp": "REER",
-      "fhsa": "CELIAPP",
-      "resp": "REEE",
-      "contributionRoom": "droits de cotisation",
-      "budgetHealth": "Santé budgétaire",
-      "onTrack": "En bonne voie",
-      "nearLimit": "Proche de la limite"
+    "block4": {
+      "label": "Connecter",
+      "headline": "Tous vos comptes, une vue claire.",
+      "body": "Compte chèques, épargne, cartes de crédit, CELI, REER, CELIAPP — ajoutez tous vos comptes canadiens et voyez l'ensemble de votre situation financière au même endroit, peu importe votre banque."
     }
   },
   "testimonials": {
@@ -58,69 +47,46 @@
     "subheadline": "De Halifax à Victoria, Owó-mi aide de vraies personnes à voir leur argent clairement.",
     "items": [
       {
-        "name": "Aanya R.",
-        "location": "Toronto, ON",
-        "since": "2025",
-        "quote": "Je ne savais pas que je dépensais 380 $ par mois en abonnements. Après deux semaines avec Owó-mi, j'en avais annulé six et mis l'épargne directement dans mon CELI. Le meilleur 8 $ par mois que je dépense."
-      },
-      {
         "name": "Marc-André B.",
         "location": "Québec, QC",
         "since": "2025",
+        "avatar": "marc-andre.jpg",
         "quote": "Mon partenaire et moi nous disputions constamment à propos de l'argent. Avec Owó-mi, nous pouvons tous les deux voir exactement ce qui entre et sort — plus de mauvaises surprises en fin de mois."
       },
       {
         "name": "Jordan K.",
         "location": "Calgary, AB",
         "since": "2025",
+        "avatar": "jordan.jpg",
         "quote": "Je ne savais jamais quels étaient mes droits de cotisation REER. Owó-mi les a mis bien en évidence. J'ai mis de côté 14 000 $ de plus que je ne l'aurais fait autrement."
-      }
-    ],
-    "shortQuotes": [
-      {
-        "name": "Priya M.",
-        "location": "Mississauga",
-        "quote": "Enfin — une application de budget qui comprend les CELI et les REER."
-      },
-      {
-        "name": "Sarah L.",
-        "location": "Halifax",
-        "quote": "Propre, rapide et vraiment canadien. J'adore."
-      },
-      {
-        "name": "David C.",
-        "location": "Vancouver",
-        "quote": "J'ai abandonné mon tableur. Je ne reviendrai jamais en arrière."
-      },
-      {
-        "name": "Fatima A.",
-        "location": "Ottawa",
-        "quote": "Le support en français est vraiment excellent. Pas une pensée de dernière minute."
-      },
-      {
-        "name": "Liam T.",
-        "location": "Edmonton",
-        "quote": "Connaît la différence entre un CELI et un REER. Enfin."
-      },
-      {
-        "name": "Mei L.",
-        "location": "Burnaby",
-        "quote": "Mes finances sont passées du chaos à la clarté en une fin de semaine."
-      },
-      {
-        "name": "Omar H.",
-        "location": "Montréal",
-        "quote": "Simple, privé et fonctionne magnifiquement sur mobile."
-      },
-      {
-        "name": "Sophie D.",
-        "location": "Saskatoon",
-        "quote": "Les alertes de budget changent tout. J'ai évité deux dépassements."
       },
       {
         "name": "Rajan P.",
-        "location": "Brampton",
-        "quote": "Les données hébergées au Canada, c'est important pour moi. Owó-mi comprend ça."
+        "location": "Surrey, BC",
+        "since": "2024",
+        "avatar": "rajan.jpg",
+        "quote": "Savoir que mes données CELI et REER ne quittent jamais le pays me rassure. Owó-mi comprend ce qui compte pour les Canadiens."
+      },
+      {
+        "name": "Grace L.",
+        "location": "Toronto, ON",
+        "since": "2025",
+        "avatar": "grace.jpg",
+        "quote": "Je ne savais pas que je dépensais 380 $ par mois en abonnements. Après deux semaines avec Owó-mi, j'en avais annulé six et mis l'épargne directement dans mon CELI. Le meilleur 8 $ par mois que je dépense."
+      },
+      {
+        "name": "Amara O.",
+        "location": "Mississauga, ON",
+        "since": "2024",
+        "avatar": "amara.jpg",
+        "quote": "Enfin, une application de budget qui comprend vraiment les CELI et les REER, au lieu de traiter les comptes canadiens comme une réflexion après coup. On dirait qu'elle a été conçue pour nous."
+      },
+      {
+        "name": "Camila R.",
+        "location": "Halifax, NS",
+        "since": "2025",
+        "avatar": "camila.jpg",
+        "quote": "Les alertes de budget changent vraiment la donne — j'ai évité deux dépassements avant qu'ils ne deviennent un vrai problème."
       }
     ]
   },
@@ -187,6 +153,60 @@
     "compliance": "Conforme à la LPRPDE et à la Loi 25 du Québec. Données hébergées au Canada (Montréal). Responsable de la protection des renseignements personnels : confidentialite@owo-mi.ca",
     "builtIn": "Conçu au Canada",
     "copyright": "© 2026 Owó-mi. « Owó-mi » (oh-WOH MEE) signifie « mon argent » en yoruba.",
-    "switchLocale": "Français"
+    "switchLocale": "English"
+  },
+  "auth": {
+    "backToHome": "Retour à l'accueil",
+    "tagline": "Votre suivi budgétaire canadien",
+    "signIn": {
+      "title": "Se connecter",
+      "subtitle": "Heureux de vous revoir sur Owó-mi.",
+      "emailLabel": "Courriel",
+      "emailPlaceholder": "jane@exemple.ca",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter",
+      "submitLoading": "Connexion en cours…",
+      "noAccount": "Pas de compte?",
+      "signUpLink": "S'inscrire",
+      "genericError": "Échec de la connexion"
+    },
+    "signUp": {
+      "title": "Créez votre compte",
+      "subtitle": "Rejoignez Owó-mi et commencez à suivre vos finances en toute confidentialité et sécurité.",
+      "nameLabel": "Nom complet",
+      "namePlaceholder": "Jane Tremblay",
+      "emailLabel": "Courriel",
+      "emailPlaceholder": "jane@exemple.ca",
+      "passwordLabel": "Mot de passe",
+      "submit": "Créer un compte",
+      "submitLoading": "Création du compte…",
+      "haveAccount": "Vous avez déjà un compte?",
+      "signInLink": "Se connecter",
+      "dataResidency": "Vos données sont hébergées au Canada et ne sont jamais vendues.",
+      "genericError": "Échec de l'inscription"
+    },
+    "mfa": {
+      "title": "Authentification à deux facteurs",
+      "subtitle": "Entrez le code à 6 chiffres de votre application d'authentification.",
+      "codeLabel": "Code d'authentification",
+      "submit": "Vérifier",
+      "submitLoading": "Vérification…",
+      "genericError": "Code invalide"
+    }
+  },
+  "sidebar": {
+    "dashboard": "Tableau de bord",
+    "accounts": "Comptes",
+    "transactions": "Transactions",
+    "budgets": "Budgets",
+    "goals": "Objectifs",
+    "settings": "Paramètres"
+  },
+  "header": {
+    "settings": "Paramètres",
+    "signOut": "Se déconnecter",
+    "lightMode": "Passer au mode clair",
+    "darkMode": "Passer au mode sombre",
+    "switchLocale": "English"
   }
 }

@@ -1,10 +1,12 @@
 import Link from 'next/link'
 import { getTranslations, getLocale } from 'next-intl/server'
+import { FooterLocaleLink } from './FooterLocaleLink'
+import type { AppLocale } from '@/lib/i18n/locale'
 
 export async function LandingFooter() {
   const locale = await getLocale()
   const t = await getTranslations('footer')
-  const altLocale = locale === 'en' ? 'fr' : 'en'
+  const altLocale: AppLocale = locale === 'en' ? 'fr' : 'en'
   const currentYear = new Date().getFullYear()
 
   return (
@@ -12,7 +14,7 @@ export async function LandingFooter() {
       className="border-t border-neutral-200/60 dark:border-neutral-800/60"
       aria-label="Footer"
     >
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+      <div className="mx-auto max-w-6xl px-4 pt-12 pb-32 sm:px-6 sm:pt-16 md:pb-16">
         {/* Main grid */}
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {/* Brand column */}
@@ -93,12 +95,7 @@ export async function LandingFooter() {
           <p className="text-xs text-neutral-400 dark:text-neutral-500">
             {t('copyright').replace('2026', currentYear.toString())}
           </p>
-          <Link
-            href={`/${altLocale}`}
-            className="text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
-          >
-            {t('switchLocale')}
-          </Link>
+          <FooterLocaleLink altLocale={altLocale} label={t('switchLocale')} />
         </div>
       </div>
     </footer>

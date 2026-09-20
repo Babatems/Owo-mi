@@ -29,7 +29,7 @@ export function IdleTimeoutWatcher() {
     toast.dismiss(TOAST_ID)
     setSigningOut(true)
     await authClient.signOut()
-    router.push('/en')
+    router.push('/')
   }, [router])
 
   useIdleTimeout({

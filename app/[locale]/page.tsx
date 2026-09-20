@@ -1,6 +1,5 @@
 import { Hero } from '@/components/landing/Hero'
 import { TrustStrip } from '@/components/landing/TrustStrip'
-import { FeatureBento } from '@/components/landing/FeatureBento'
 import { FeatureBlocks } from '@/components/landing/FeatureBlocks'
 import { Testimonials } from '@/components/landing/Testimonials'
 import { FAQ } from '@/components/landing/FAQ'
@@ -11,7 +10,6 @@ export default function LandingPage() {
     <>
       <Hero />
       <TrustStrip />
-      <FeatureBento />
       <FeatureBlocks />
       <Testimonials />
       <FAQ />

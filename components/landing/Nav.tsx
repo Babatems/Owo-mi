@@ -4,34 +4,25 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { useTheme } from 'next-themes'
 import { Sun, Moon, Menu, X } from 'lucide-react'
+import { useThemeTransition } from '@/lib/hooks/use-theme-transition'
+import { persistLocaleCookie, type AppLocale } from '@/lib/i18n/locale'
 import { cn } from '@/lib/utils'
 
 export function LandingNav() {
   const t = useTranslations('nav')
   const pathname = usePathname()
-  const { theme, setTheme } = useTheme()
+  const { theme, handleThemeToggle } = useThemeTransition()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  function handleThemeToggle(e: React.MouseEvent<HTMLButtonElement>) {
-    const rect = e.currentTarget.getBoundingClientRect()
-    document.documentElement.style.setProperty('--vt-x', `${rect.left + rect.width / 2}px`)
-    document.documentElement.style.setProperty('--vt-y', `${rect.top + rect.height / 2}px`)
-    const next = theme === 'dark' ? 'light' : 'dark'
-    if (!document.startViewTransition) {
-      setTheme(next)
-      return
-    }
-    document.startViewTransition(() => {
-      setTheme(next)
-    })
-  }
-
   const isEn = pathname.startsWith('/en')
-  const altLocale = isEn ? 'fr' : 'en'
+  const altLocale: AppLocale = isEn ? 'fr' : 'en'
   const altPath = pathname.replace(/^\/(en|fr)/, `/${altLocale}`)
+
+  function handleLocaleSwitch() {
+    persistLocaleCookie(altLocale)
+  }
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -66,6 +57,7 @@ export function LandingNav() {
           {/* Locale toggle */}
           <Link
             href={altPath}
+            onClick={handleLocaleSwitch}
             className="rounded-md px-3 py-1.5 text-sm text-neutral-500 transition-colors hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white"
           >
             {t('switchLocale')}
@@ -128,7 +120,10 @@ export function LandingNav() {
           <div className="flex flex-col gap-1">
             <Link
               href={altPath}
-              onClick={() => setMenuOpen(false)}
+              onClick={() => {
+                handleLocaleSwitch()
+                setMenuOpen(false)
+              }}
               className="rounded-md px-3 py-2.5 text-sm text-neutral-600 hover:bg-neutral-100 dark:text-neutral-400 dark:hover:bg-neutral-800"
             >
               {t('switchLocale')}
